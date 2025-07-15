@@ -67,7 +67,7 @@ setuserById(user.id);
     return <div>Loading...</div>; // or a spinner
   }
 
-axiosInstance.defaults.baseURL = 'http://localhost:5000';
+axiosInstance.defaults.baseURL = 'https://quickart-mern-deploy.onrender.com';
 axiosInstance.defaults.withCredentials = true; // ✅ Important for sending cookies
 
   return (

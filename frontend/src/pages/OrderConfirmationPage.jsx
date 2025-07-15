@@ -20,7 +20,7 @@ useEffect(() => {
     }
     if (session_id) {
 
-      const res = await fetch(`http://localhost:5000/api/orders/confirm?session_id=${session_id}`, {
+      const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/orders/confirm?session_id=${session_id}`, {
         credentials: 'include'
       });
             if (!res.ok) {

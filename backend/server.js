@@ -13,7 +13,7 @@
   const app=express();
   app.use(cookieParser());
   const corsOptions = {
-    origin: 'http://localhost:5173', // Replace with your frontend's origin
+    origin: 'https://quickart-mern-deploy-1.onrender.com', // Replace with your frontend's origin
     credentials: true,
   };
   app.use(cors(corsOptions));

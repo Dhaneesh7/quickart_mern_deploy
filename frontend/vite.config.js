@@ -11,7 +11,8 @@ export default defineConfig({
    proxy: {
       // This proxies all requests starting with /api to your backend
       '/api': {
-        target: 'http://localhost:5000',
+        // target: 'http://localhost:5000',
+        target: 'https://quickart-mern-deploy.onrender.com',
         changeOrigin: true,
         secure: false,
       },
