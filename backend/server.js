@@ -35,8 +35,8 @@
   app.use('/api/orders',OrderRoutes)
   app.use('/api/payments',paymentroutes)
 
-  const PORT = process.env.PORT || 5000
-  app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+  const PORT =parseInt(process.env.PORT, 10) || 5000
+  app.listen(PORT, '0.0.0.0', () => console.log(`Server started on port ${PORT}`));
   // const ProductRoutes=require('./routes/ProductRoutes');
   // const cors = require('cors');
   // const express = require('express');
