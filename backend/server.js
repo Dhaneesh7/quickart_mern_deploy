@@ -13,8 +13,10 @@
   const app=express();
   app.use(cookieParser());
   const corsOptions = {
-    origin: 'https://quickart-mern-deploy-1.onrender.com', // Replace with your frontend's origin
+    origin:  process.env.FRONTEND_URL, // Replace with your frontend's origin
     credentials: true,
+      methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"]
   };
   app.use(cors(corsOptions));
 
