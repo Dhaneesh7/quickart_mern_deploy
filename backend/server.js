@@ -28,12 +28,12 @@
   //         console.log("connection not created",err)
 
   // })
-  app.use('/api/products', ProductRoutes)
-  app.use('/api/carts',CartRoutes)
+  app.use('/products', ProductRoutes)
+  app.use('/carts',CartRoutes)
   app.use('/user', UserRoutes)  
-  app.use("/api/auth", authRoutes);
-  app.use('/api/orders',OrderRoutes)
-  app.use('/api/payments',paymentroutes)
+  app.use("/auth", authRoutes);
+  app.use('/orders',OrderRoutes)
+  app.use('/payments',paymentroutes)
 
   const PORT =parseInt(process.env.PORT, 10) || 5000
   app.listen(PORT, '0.0.0.0', () => console.log(`Server started on port ${PORT}`));
