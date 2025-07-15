@@ -22,7 +22,7 @@ loading: true,
 		}
 
 		try {
-			const res = await axiosInstance.post("/api/auth/signup", { name, email, password ,role });
+			const res = await axiosInstance.post("/auth/signup", { name, email, password ,role });
 			if (res?.data) {
 				const user = res.data;
 				console.log("Signup response user:", user);
@@ -45,7 +45,7 @@ loading: true,
 	setuserById: async (userId,{silent=false}={}) => {
 		set({ loading: true });
 		try {
-			const res = await axiosInstance.get(`/api/auth/user/${userId}`);
+			const res = await axiosInstance.get(`/auth/user/${userId}`);
 			if (res?.data) {
 				const u = res.data;
     set({
@@ -73,7 +73,7 @@ loading: true,
 		set({ loading: true });
 
 		try {
-			const res = await axiosInstance.post("/api/auth/login", { email, password });
+			const res = await axiosInstance.post("/auth/login", { email, password });
      const user = res.data;
 	    console.log("Login response user:", user); 
 			set({ user: {id:user._id,name:user.name,email:user.email,role:user.role}, loading: false });
@@ -101,7 +101,7 @@ loading: true,
 	checkAuth: async () => {
 		set({ checkingAuth: true });
 		try {
-			const response = await axiosInstance.get("/api/auth/profile");
+			const response = await axiosInstance.get("/auth/profile");
 			// set({ user: response.data, checkingAuth: false });
 			   const u = response.data;
   set({
@@ -120,7 +120,7 @@ loading: true,
 
 		set({ checkingAuth: true });
 		try {
-			const response = await axiosInstance.post("/api/auth/refresh-token");
+			const response = await axiosInstance.post("/auth/refresh-token");
 			// set({ checkingAuth: false });
 				await get().checkAuth();
 			return response.data;

@@ -10,7 +10,7 @@ export const useOrderStore = create((set) => ({
     try {
            const userId = useUserStore.getState().user?.id;
       set({ loading: true });
-      const response = await axiosInstance.post(`/api/orders/${userId}`, orderData); // adjust to your backend API
+      const response = await axiosInstance.post(`/orders/${userId}`, orderData); // adjust to your backend API
       set((state) => ({
         orders: [...state.orders, response.data],
         loading: false,
@@ -26,7 +26,7 @@ export const useOrderStore = create((set) => ({
     try {
                    const userId = useUserStore.getState().user?.id;
 
-      const response = await axiosInstance.get(`/api/orders/${userId}`);
+      const response = await axiosInstance.get(`/orders/${userId}`);
       set({ orders: response.data });
     } catch (error) {
       console.error("Failed to fetch orders", error);
@@ -46,7 +46,7 @@ export const useOrderStore = create((set) => ({
       return false;
     }
     try {
-      const {data} = await axiosInstance.post(`/api/orders/cart/${userId}`, { cartItems:cartItems });
+      const {data} = await axiosInstance.post(`/orders/cart/${userId}`, { cartItems:cartItems });
       console.log("Response from CartToStore:",data);
       set((state) => ({
         orders: [...state.orders, ...data],
@@ -66,8 +66,8 @@ export const useOrderStore = create((set) => ({
       return;
     }
     try {
-      // Fix endpoint: your backend expects DELETE /api/carts/:userId with productId in body
-await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
+      // Fix endpoint: your backend expects DELETE /carts/:userId with productId in body
+await axiosInstance.delete(`/orders/${userId}/${orderId}`);
 
       set((prevState) => ({
         orders: prevState.orders.filter((item) => item._id !== orderId),

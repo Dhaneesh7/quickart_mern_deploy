@@ -15,7 +15,7 @@ export const useCartStore = create((set, get) => ({
       return;
     }
     try {
-      const res = await axiosInstance.get(`/api/carts/${userId}`);
+      const res = await axiosInstance.get(`/carts/${userId}`);
       const cartItemsFromBackend = res.data;
 
       // Correct the mapping to access quantity from item.quantity, not item.item.quantity
@@ -46,8 +46,8 @@ export const useCartStore = create((set, get) => ({
       return;
     }
      try {
-      // Fix endpoint: your backend expects DELETE /api/carts/:userId with productId in body
-      await axiosInstance.delete(`/api/carts/all/${userId}`, { data: { productId } });
+      // Fix endpoint: your backend expects DELETE /carts/:userId with productId in body
+      await axiosInstance.delete(`/carts/all/${userId}`, { data: { productId } });
    set({...initialState});
      }catch{
       
@@ -59,7 +59,7 @@ export const useCartStore = create((set, get) => ({
       const userId = useUserStore.getState().user?.id;
       if (!userId) throw new Error("User not logged in");
 
-      await axiosInstance.post(`/api/carts/${userId}`, { productId: product._id,quantity: product.quantity ||1});
+      await axiosInstance.post(`/carts/${userId}`, { productId: product._id,quantity: product.quantity ||1});
       toast.success("Product added to cart");
 
       set((prevState) => {
@@ -85,8 +85,8 @@ export const useCartStore = create((set, get) => ({
       return;
     }
     try {
-      // Fix endpoint: your backend expects DELETE /api/carts/:userId with productId in body
-      await axiosInstance.delete(`/api/carts/${userId}`, { data: { productId } });
+      // Fix endpoint: your backend expects DELETE /carts/:userId with productId in body
+      await axiosInstance.delete(`/carts/${userId}`, { data: { productId } });
       set((prevState) => ({
         cart: prevState.cart.filter((item) => item._id !== productId),
       }));
@@ -108,8 +108,8 @@ export const useCartStore = create((set, get) => ({
       return;
     }
     try {
-      // Fix endpoint: your backend expects PUT /api/carts/:userId/:productId
-      await axiosInstance.put(`/api/carts/${userId}/${productId}`, { quantity });
+      // Fix endpoint: your backend expects PUT /carts/:userId/:productId
+      await axiosInstance.put(`/carts/${userId}/${productId}`, { quantity });
       set((prevState) => ({
         cart: prevState.cart.map((item) =>
           item._id === productId ? { ...item, quantity } : item
