@@ -77,7 +77,7 @@ loading: true,
     //  const user = res.data;
 	 const { accessToken, refreshToken, ...userData } = res.data;
 	    console.log("Login response user:", user); 
-			set({ user: {id:user._id,name:user.name,email:user.email,role:user.role,accessToken:accessToken}, loading: false });
+			set({ user: {id:userData._id,name:userData.name,email:userData.email,role:userData.role,accessToken:accessToken}, loading: false });
 			console.log("User logged in:", get().user);
 			return true;
 			
