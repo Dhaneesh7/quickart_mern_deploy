@@ -20,7 +20,7 @@ error:null,
       return;
     }
 
-			const res = await axiosInstance.post(`/products/${userId}`, productData);
+			const res = await axiosInstance.post(`/api/products/${userId}`, productData);
 			set((prevState) => ({
 				products: [...prevState.products, res.data],
 				loading: false,
@@ -58,7 +58,7 @@ fetchAllProducts: async () => {
 	fetchProductsByCategory: async (category) => {
 		set({ loading: true });
 		try {
-			const response = await axiosInstance.get(`/products/category/${category}`);
+			const response = await axiosInstance.get(`/api/products/category/${category}`);
 			set({ products: response.data, loading: false });
 		} catch (error) {
 			  const message = error?.response?.data?.message || "Failed to fetch products";
@@ -71,7 +71,7 @@ fetchAllProducts: async () => {
 		 fetchProductByid: async (productId) => {
 		  try {
 
-			 const res = await axiosInstance.get(`/products/id/${productId}`);
+			 const res = await axiosInstance.get(`/api/products/id/${productId}`);
 			 return res.data;
 		  } catch (error) {
 			toast.error(error.message || "Error loading product");
@@ -81,7 +81,7 @@ fetchAllProducts: async () => {
 	deleteProduct: async (productId) => {
   set({ loading: true });
   try {
-    await axiosInstance.delete(`/products/${productId}`);
+    await axiosInstance.delete(`/api/products/${productId}`);
     set((state) => ({
       products: state.products.filter((p) => p._id !== productId),
       loading: false,
