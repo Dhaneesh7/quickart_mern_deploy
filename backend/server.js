@@ -16,7 +16,9 @@
     origin:  process.env.FRONTEND_URL, // Replace with your frontend's origin
     credentials: true,
       methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
-  allowedHeaders: ["Content-Type","Authorization"]
+  allowedHeaders: ["Content-Type","Authorization"],
+  exposedHeaders: ["Set-Cookie"]
+
   };
   app.use(cors(corsOptions));
 
