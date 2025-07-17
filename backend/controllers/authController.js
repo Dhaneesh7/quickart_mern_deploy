@@ -69,6 +69,8 @@ const signup = async (req, res) => {
 			name: user.name,
 			email: user.email,
 			role: user.role,
+			accessToken,
+			refreshToken
 		});
 	} catch (error) {
 		console.log("Error in signup controller", error.message);
@@ -92,6 +94,8 @@ console.log("User found in login:", user);
 				name: user.name,
 				email: user.email,
 				role: user.role,
+				accessToken,
+				refreshToken,
 			});
 		} else {
 			res.status(400).json({ message: "Invalid email or password" });
@@ -145,6 +149,7 @@ const isProd = process.env.NODE_ENV === "production";
 			// sameSite: "strict",
 			// sameSite: "none",
 			  sameSite: isProd ? "none" : "lax",
+			     path: "/",
 			maxAge: 15 * 60 * 1000,
 		});
        res.json({ accessToken: newaccessToken });
