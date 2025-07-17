@@ -115,23 +115,38 @@ loading: true,
 	},
 
 	refreshToken: async () => {
-		// Prevent multiple simultaneous refresh attempts
-		if (get().checkingAuth) return;
+// 		// Prevent multiple simultaneous refresh attempts
+// 		if (get().checkingAuth) return;
 
-		set({ checkingAuth: true });
-		try {
-			const response = await axiosInstance.post("/auth/refresh-token");
-			// set({ checkingAuth: false });
-				await get().checkAuth();
-			return response.data;
-		} catch (error) {
-			set({ user: null, });
-			  toast.error("Session expired. Please log in again.");
-			throw error;
-		}
-		 finally {
-    set({ checkingAuth: false }); // moved here to always run
+// 		set({ checkingAuth: true });
+// 		try {
+// 			const response = await axiosInstance.post("/api/auth/refresh-token");
+// 			// set({ checkingAuth: false });
+// 				await get().checkAuth();
+// 			return response.data;
+// 		} catch (error) {
+// 			set({ user: null, });
+// 			  toast.error("Session expired. Please log in again.");
+// 			throw error;
+// 		}
+// 		 finally {
+//     set({ checkingAuth: false }); // moved here to always run
+//   }
+  set({ checkingAuth: true });
+  try {
+    const { data } = await axiosInstance.post("/api/auth/refresh-token");
+    set(state => ({
+      user: { ...state.user, accessToken: data.accessToken }
+    }));
+    return data.accessToken;
+  } catch (err) {
+    set({ user: null , checkingAuth: false });
+    toast.error("Session expired. Please log in again.");
+    throw err;
+  } finally {
+    set({ checkingAuth: false });
   }
+
 	},
 }),{
 	name: "userStore",
@@ -142,6 +157,16 @@ loading: true,
 
 // Axios interceptor for token refresh
 let refreshPromise = null;
+axiosInstance.interceptors.request.use(
+  config => {
+    const token = useUserStore.getState().user?.accessToken;
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  error => Promise.reject(error)
+);
 
 axiosInstance.interceptors.response.use(
 	(response) => response,
@@ -149,23 +174,26 @@ axiosInstance.interceptors.response.use(
 		const originalRequest = error.config;
 		if (error.response?.status === 401 && !originalRequest._retry) {
 			originalRequest._retry = true;
-
-			try {
+  if (!refreshPromise) {
+        refreshPromise = useUserStore.getState().refreshToken();
+      }
+			try {await refreshPromise;
+        return axiosInstance(original);
 				// If a refresh is already in progress, wait for it to complete
-				if (refreshPromise) {
-					await refreshPromise;
-					return axiosInstance(originalRequest);
-				}
+				// if (refreshPromise) {
+				// 	await refreshPromise;
+				// 	return axiosInstance(originalRequest);
+				// }
 
-				// Start a new refresh process
-				refreshPromise = useUserStore.getState().refreshToken();
-				await refreshPromise;
+				// // Start a new refresh process
+				// refreshPromise = useUserStore.getState().refreshToken();
+				// await refreshPromise;
 				
 
-				return axiosInstance(originalRequest);
+				// return axiosInstance(originalRequest);
 			} catch (refreshError) {
 				// If refresh fails, redirect to login or handle as needed
-				useUserStore.getState().logout();
+				await useUserStore.getState().logout();
 				return Promise.reject(refreshError);
 			}
 			 finally {
