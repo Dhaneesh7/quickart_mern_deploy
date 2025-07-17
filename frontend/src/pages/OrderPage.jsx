@@ -19,7 +19,7 @@ const PlaceOrderPage = () => {
   
 useEffect(() => {
   async function fetchProduct() {
-    const res = await fetch(`http://localhost:5000/api/products/id/${product}`);
+    const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/products/id/${product}`);
     const data = await res.json();
     setProductData(data);
   }
@@ -59,7 +59,7 @@ name: productData.name,  // product comes from useParams as a string product id
     // }
     //with stripe
      try {
-    const res = await fetch("http://localhost:5000/api/payments/create-checkout-session", {
+    const res = await fetch("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
