@@ -120,7 +120,7 @@ loading: true,
 
 		set({ checkingAuth: true });
 		try {
-			const response = await axiosInstance.post("/api/auth/refresh-token");
+			const response = await axiosInstance.post("/auth/refresh-token");
 			// set({ checkingAuth: false });
 				await get().checkAuth();
 			return response.data;
