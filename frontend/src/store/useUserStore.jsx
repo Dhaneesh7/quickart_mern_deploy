@@ -22,7 +22,7 @@ loading: true,
 		}
 
 		try {
-			const res = await axiosInstance.post("/api/auth/signup", { name, email, password ,role });
+			const res = await axiosInstance.post("/api/auth/signup", { name, email, password ,role },  { withCredentials: true });
 			if (res?.data) {
 				const user = res.data;
 				console.log("Signup response user:", user);
@@ -73,7 +73,7 @@ loading: true,
 		set({ loading: true });
 
 		try {
-			const res = await axiosInstance.post("/api/auth/login", { email, password });
+			const res = await axiosInstance.post("/api/auth/login", { email, password }  ,{ withCredentials: true });
     //  const user = res.data;
 	 const { accessToken, refreshToken, ...userData } = res.data;
 	    console.log("Login response user:", user); 
@@ -102,7 +102,7 @@ loading: true,
 	checkAuth: async () => {
 		set({ checkingAuth: true });
 		try {
-			const response = await axiosInstance.get("/api/auth/profile");
+			const response = await axiosInstance.get("/api/auth/profile",  { withCredentials: true });
 			// set({ user: response.data, checkingAuth: false });
 			   const u = response.data;
   set({
@@ -135,7 +135,7 @@ loading: true,
 //   }
   set({ checkingAuth: true });
   try {
-    const { data } = await axiosInstance.post("/api/auth/refresh-token");
+    const { data } = await axiosInstance.post("/api/auth/refresh-token",  { withCredentials: true });
     set(state => ({
       user: { ...state.user, accessToken: data.accessToken }
     }));
