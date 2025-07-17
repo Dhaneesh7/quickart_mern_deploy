@@ -74,9 +74,10 @@ loading: true,
 
 		try {
 			const res = await axiosInstance.post("/api/auth/login", { email, password });
-     const user = res.data;
+    //  const user = res.data;
+	 const { accessToken, refreshToken, ...userData } = res.data;
 	    console.log("Login response user:", user); 
-			set({ user: {id:user._id,name:user.name,email:user.email,role:user.role}, loading: false });
+			set({ user: {id:user._id,name:user.name,email:user.email,role:user.role,accessToken:accessToken}, loading: false });
 			console.log("User logged in:", get().user);
 			return true;
 			
