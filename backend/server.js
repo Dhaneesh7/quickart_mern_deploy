@@ -12,22 +12,22 @@
   const cookieParser = require('cookie-parser')
   const app=express();
   app.use(cookieParser());
-  // const corsOptions = {
-  //   // origin:  process.env.FRONTEND_URL, // Replace with your frontend's origin
-  //   origin: "https://quickart-mern-deploy-1.onrender.com",
-  //   credentials: true,
-  //     methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
-  // allowedHeaders: ["Content-Type","Authorization"],
-  // exposedHeaders: ["Set-Cookie"]
+  const corsOptions = {
+    // origin:  process.env.FRONTEND_URL, // Replace with your frontend's origin
+    origin: "https://quickart-mern-deploy-1.onrender.com",
+    credentials: true,
+      methods: ["GET","POST","PUT","DELETE","PATCH","OPTIONS"],
+  allowedHeaders: ["Content-Type","Authorization"],
+  exposedHeaders: ["Set-Cookie"]
 
-  // };
+  };
   app.set('trust proxy', 1); 
-  app.use(cors({
-  origin: process.env.FRONTEND_URL, // e.g. https://quickart-mern-deploy-1.onrender.com
-  credentials: true,
-  exposedHeaders: ['Set-Cookie']
-}));
-  // app.use(cors(corsOptions));
+//   app.use(cors({
+//   origin: process.env.FRONTEND_URL, // e.g. https://quickart-mern-deploy-1.onrender.com
+//   credentials: true,
+//   exposedHeaders: ['Set-Cookie']
+// }));
+  app.use(cors(corsOptions));
 
   app.use(express.json({limit: '10mb'}));
   connectdb();
