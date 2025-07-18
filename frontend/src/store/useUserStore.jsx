@@ -75,6 +75,7 @@ loading: true,
 		try {
 			const res = await axiosInstance.post("/api/auth/login", { email, password }  ,{ withCredentials: true });
     //  const user = res.data;
+	console.log("response login",res.data);
 	 const { accessToken, refreshToken, ...userData } = res.data;
 	    console.log("Login response user:", user); 
 			set({ user: {id:userData._id,name:userData.name,email:userData.email,role:userData.role,accessToken:accessToken}, loading: false });
@@ -105,6 +106,8 @@ loading: true,
 			const response = await axiosInstance.get("/api/auth/profile",  { withCredentials: true });
 			// set({ user: response.data, checkingAuth: false });
 			   const u = response.data;
+			   	console.log("response checkauth",u);
+
   set({
      user: { id: u._id, name: u.name, email: u.email },
      checkingAuth: false
