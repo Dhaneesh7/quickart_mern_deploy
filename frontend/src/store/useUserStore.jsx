@@ -45,7 +45,7 @@ loading: true,
 	setuserById: async (userId,{silent=false}={}) => {
 		set({ loading: true });
 		try {
-			const res = await axiosInstance.get(`/api/auth/user/${userId}`);
+			const res = await axiosInstance.get(`/api/auth/user/${userId}`,{ withCredentials: true });
 			if (res?.data) {
 				const u = res.data;
     set({
@@ -91,7 +91,7 @@ loading: true,
 
 	logout: async () => {
 		try {
-			await axiosInstance.post("/api/auth/logout");
+			await axiosInstance.post("/api/auth/logout",{ withCredentials: true });
 			set({ user: null });
 		
 		toast.success("Logged out");
