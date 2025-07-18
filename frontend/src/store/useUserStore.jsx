@@ -102,7 +102,7 @@ loading: true,
 	checkAuth: async () => {
 		set({ checkingAuth: true });
 		try {
-			const response = await axiosInstance.get("/auth/profile",  { withCredentials: true });
+			const response = await axiosInstance.get("/api/auth/profile",  { withCredentials: true });
 			// set({ user: response.data, checkingAuth: false });
 			   const u = response.data;
   set({
