@@ -74,7 +74,7 @@ loading: true,
 
 		try {
 			const res = await axiosInstance.post("/api/auth/login", { email, password }  ,{ withCredentials: true });
-    //  const user = res.data;
+     const user = res.data;
 	console.log("response login",res.data);
 	 const { accessToken, refreshToken, ...userData } = res.data;
 	    console.log("Login response user:", user); 
