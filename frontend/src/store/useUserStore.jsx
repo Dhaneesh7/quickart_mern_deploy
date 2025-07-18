@@ -103,7 +103,7 @@ loading: true,
 	checkAuth: async () => {
 		set({ checkingAuth: true });
 		try {
-			const response = await fetch("https://quickart-mern-deploy-1.onrender.com/api/auth/profile",  {  credentials: 'include'});
+			const response = await fetch("https://quickart-mern-deploy.onrender.com/api/auth/profile",  {  credentials: 'include'});
 			// set({ user: response.data, checkingAuth: false });
 			   const u = response.data;
 			   	console.log("response checkauth",u);
