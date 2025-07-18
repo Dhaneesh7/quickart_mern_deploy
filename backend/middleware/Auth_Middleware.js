@@ -30,7 +30,7 @@ const protectRoute = async (req, res, next) => {
 		// }
 
 		// req.user = user;
-		next();
+		return next();
 	} catch (error) {
 		console.error("Error in protectRoute middleware:", error.message);
 
@@ -44,7 +44,7 @@ const protectRoute = async (req, res, next) => {
 
 const adminRoute = (req, res, next) => {
 	if (req.user?.role === "admin") {
-		next();
+		return next();
 	} else {
 		return res.status(403).json({ message: "Access denied - Admin only" });
 	}
