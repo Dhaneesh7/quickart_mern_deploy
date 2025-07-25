@@ -28,6 +28,7 @@ import Footer from './components/Footer'
 import BulkOrderPage from './pages/BulkOrder'
 import axiosInstance from './lib/axios'
 import { useRef } from 'react'
+import OrderCancel from './pages/OrderCancel'
 function App() {
 	const called = useRef(false);
 	const { user, checkAuth, checkingAuth,setuserById } = useUserStore();
@@ -110,6 +111,7 @@ axiosInstance.defaults.withCredentials = true; // ✅ Important for sending cook
 					<Route path='/orders/confirm' element={ <OrderConfirmationPage/> } />
 					<Route path='/orders/confirm/bulk' element={<BulkOrderPage/>} />
 					<Route path='/orders' element={<Orders theme={theme}/>} />
+					<Route path='/orders/cancel' element={<OrderCancel />} />
 					<Route path='/search' element={<Search />} />
 					<Route path='/about' element={<About />} />
 					
