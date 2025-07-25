@@ -12,12 +12,12 @@ const axiosInstance = axios.create({
 
 
 // ❌ Remove this interceptor unless you're switching to header-based auth
-// axiosInstance.interceptors.request.use((config) => {
-//   const token = localStorage.getItem("accessToken");
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+axiosInstance.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
 
 export default axiosInstance;
