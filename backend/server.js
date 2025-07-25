@@ -14,7 +14,9 @@ const app = express();
 app.use(cookieParser());
 const corsOptions = {
   // origin:  process.env.FRONTEND_URL, // Replace with your frontend's origin
-  origin: "https://quickart-mern-deploy-1.onrender.com",
+  // origin: "https://quickart-mern-deploy-1.onrender.com",
+  origin: "https://quickart-mern-deploy.vercel.app",
+
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
