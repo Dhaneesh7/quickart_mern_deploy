@@ -63,9 +63,7 @@ setuserById(user.id);
   console.log("🛒 Fetching cart items...");
 		getCartItems();
 	}, [getCartItems, user,checkingAuth]);
-	  if (checkingAuth) {
-    return <div>Loading...</div>; // or a spinner
-  }
+	
 
 axiosInstance.defaults.baseURL = 'https://quickart-mern-deploy.onrender.com';
 axiosInstance.defaults.withCredentials = true; // ✅ Important for sending cookies
