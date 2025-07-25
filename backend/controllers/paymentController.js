@@ -105,6 +105,8 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const createCheckoutSession = async (req, res) => {
   try {
     console.log("⚠️ Incoming req.body:", req.body);
+console.log("Cookies:", req.cookies);
+console.log("Access Token:", req.cookies.accessToken);
 
     const { productId, name, email, phone, address, quantity, unitPriceRupees } = req.body;
         if (!productId || !name || !email || !quantity || !unitPriceRupees) {
@@ -167,6 +169,9 @@ console.log("Creating checkout session for user:", email, "with product ID:", pr
 // Bulk checkout (e.g., cart checkout)
 const createBulkCheckout = async (req, res) => {
   try {
+    console.log("Cookies:", req.cookies);
+console.log("Access Token:", req.cookies.accessToken);
+
     const { cart } = req.body;
     if (!Array.isArray(cart) || cart.length === 0) {
       return res.status(400).json({ error: "Cart must contain at least one item" });

@@ -6,8 +6,8 @@ import { useOrderStore } from "../store/useOrderStore";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect } from "react";
 const PlaceOrderPage = () => {
-   const { product } = useParams();
-   const [productData, setProductData] = useState(null);
+  const { product } = useParams();
+  const [productData, setProductData] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,27 +16,27 @@ const PlaceOrderPage = () => {
     product: "",
     quantity: 1,
   });
-  
-useEffect(() => {
-  async function fetchProduct() {
-    const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/products/id/${product}`);
-    const data = await res.json();
-    setProductData(data);
-  }
-  fetchProduct();
-}, [product]);
+
+  useEffect(() => {
+    async function fetchProduct() {
+      const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/products/id/${product}`);
+      const data = await res.json();
+      setProductData(data);
+    }
+    fetchProduct();
+  }, [product]);
 
   const navigate = useNavigate();
   const { addOrder, loading } = useOrderStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      const orderData = {
-    ...formData,
-unitPriceRupees: productData.price,
-productId: productData._id,
-name: productData.name,  // product comes from useParams as a string product id
-  };
+    const orderData = {
+      ...formData,
+      unitPriceRupees: productData.price,
+      productId: productData._id,
+      name: productData.name,  // product comes from useParams as a string product id
+    };
     //     await setFormData((prev) => ({
     //   ...prev,
     //   product: product._id,
@@ -58,32 +58,32 @@ name: productData.name,  // product comes from useParams as a string product id
     //   navigate("/orders/confirm/order-confirmation");
     // }
     //with stripe
-     try {
-    const res = await fetch("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-       credentials: "include", // ✅ include cookies
-      body: JSON.stringify(orderData),
-    });
-        if (!res.ok) {
-      const errText = await res.text();
-      console.error("Failed to create checkout session:", res.status, errText);
-      return;
+    try {
+      const res = await fetch("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // ✅ include cookies
+        body: JSON.stringify(orderData),
+      });
+      if (!res.ok) {
+        const errText = await res.text();
+        console.error("Failed to create checkout session:", res.status, errText);
+        return;
+      }
+
+      const data = await res.json();
+
+      const stripe = await loadStripe("pk_test_51RaWhqH9FCrDK0ULWAYDWcJzMJ5CWZuoUAXLgCR6KpPARhq3xNAtrbTuIyHpCW9yqhN9taojvfeSYGgyiysifzJK00dgL2QG55");
+      const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+
+      if (result.error) {
+        console.error(result.error.message);
+      }
+    } catch (err) {
+      console.error("Stripe Checkout error", err);
     }
-
-    const data = await res.json();
-
-    const stripe = await loadStripe("pk_test_51RaWhqH9FCrDK0ULWAYDWcJzMJ5CWZuoUAXLgCR6KpPARhq3xNAtrbTuIyHpCW9yqhN9taojvfeSYGgyiysifzJK00dgL2QG55");
-    const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
-
-    if (result.error) {
-      console.error(result.error.message);
-    }
-  } catch (err) {
-    console.error("Stripe Checkout error", err);
-  }
   };
 
   return (
@@ -166,7 +166,7 @@ name: productData.name,  // product comes from useParams as a string product id
                 type='number'
                 min='1'
                 value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity:parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
                 className='mt-1 block w-full bg-gray-700 border border-gray-600 text-white px-3 py-2 rounded-md'
               />
             </div>

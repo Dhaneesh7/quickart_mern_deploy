@@ -15,12 +15,12 @@ const generateTokens = (userId) => {
 };
 
 const storeRefreshToken = async (userId, refreshToken) => {
-	try{
-	await redis.set(`refresh_token:${userId}`, refreshToken, "EX", 7 * 24 * 60 * 60); // 7 days
+	try {
+		await redis.set(`refresh_token:${userId}`, refreshToken, "EX", 7 * 24 * 60 * 60); // 7 days
 	} catch (error) {
 		console.error("Error storing refresh token in Redis:", error.message);
 		throw new Error("Failed to store refresh token");
-	}	
+	}
 };
 
 const setCookies = (res, accessToken, refreshToken) => {
@@ -33,7 +33,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 		// secure: true, // For production, set to true
 		// sameSite: "none",
-		 sameSite: isProd ? "none" : "lax", // lax for dev
+		sameSite: isProd ? "none" : "lax", // lax for dev
 		// sameSite: "strict",
 		maxAge: 15 * 60 * 1000,
 	});
@@ -51,14 +51,14 @@ const setCookies = (res, accessToken, refreshToken) => {
 };
 
 const signup = async (req, res) => {
-	const { email, password, name ,role} = req.body;
+	const { email, password, name, role } = req.body;
 	try {
 		const userExists = await User.findOne({ email });
 
 		if (userExists) {
 			return res.status(400).json({ message: "User already exists" });
 		}
-		const user = await User.create({ name, email, password ,role});
+		const user = await User.create({ name, email, password, role });
 
 		const { accessToken, refreshToken } = generateTokens(user._id);
 		await storeRefreshToken(user._id, refreshToken);
@@ -82,7 +82,7 @@ const login = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const user = await User.findOne({ email }).select("+password");
-console.log("User found in login:", user);
+		console.log("User found in login:", user);
 		if (user && (await user.comparePassword(password))) {
 			const { accessToken, refreshToken } = generateTokens(user._id);
 			console.log("Generated tokens:", { accessToken, refreshToken });
@@ -109,7 +109,7 @@ console.log("User found in login:", user);
 const logout = async (req, res) => {
 	try {
 		const refreshToken = req.cookies.refreshToken;
-		
+
 		if (refreshToken) {
 			const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
 			await redis.del(`refresh_token:${decoded.userId}`);
@@ -140,7 +140,7 @@ const refreshToken = async (req, res) => {
 		}
 
 		const newaccessToken = jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
-const isProd = process.env.NODE_ENV === "production";
+		const isProd = process.env.NODE_ENV === "production";
 
 		res.cookie("accessToken", newaccessToken, {
 			httpOnly: true,
@@ -148,34 +148,34 @@ const isProd = process.env.NODE_ENV === "production";
 			// secure: true, // For production, set to true
 			// sameSite: "strict",
 			// sameSite: "none",
-			  sameSite: isProd ? "none" : "lax",
-			     path: "/",
+			sameSite: isProd ? "none" : "lax",
+			path: "/",
 			maxAge: 15 * 60 * 1000,
 		});
-       res.json({ accessToken: newaccessToken });
+		res.json({ accessToken: newaccessToken });
 		// res.json({ message: "Token refreshed successfully" });
 	} catch (error) {
 		console.log("Error in refreshToken controller", error.message);
 		res.status(401).json({ message: "Server error", error: error.message });
 	}
 };
-	const getUserById = async (req, res) => {
-  try {
-    const userId = req.params.id;
+const getUserById = async (req, res) => {
+	try {
+		const userId = req.params.id;
 
-    const user = await User.findById(req.user.userId).select("-password");
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+		const user = await User.findById(req.user.userId).select("-password");
+		if (!user) {
+			return res.status(404).json({ message: "User not found" });
+		}
 
-    res.json(user);
-  } catch (error) {
-    console.error("Error fetching user by ID:", error);
-    res.status(500).json({ message: "Server Error" });
-  }
+		res.json(user);
+	} catch (error) {
+		console.error("Error fetching user by ID:", error);
+		res.status(500).json({ message: "Server Error" });
+	}
 };
 const getProfile = async (req, res) => {
-		try {
+	try {
 		// const user = await User.findById(req.user.userId);
 
 		// if (!user) {
@@ -183,14 +183,14 @@ const getProfile = async (req, res) => {
 		// }
 
 		// res.json(user);
-		 if (!req.user ) {
-      return res.status(401).json({ message: "Unauthorized access" });
-    }
+		if (!req.user) {
+			return res.status(401).json({ message: "Unauthorized access" });
+		}
 
-    const user = await User.findById(req.user.userId).select("_id name email role");
-    if (!user) return res.status(404).json({ message: "User not found" });
+		const user = await User.findById(req.user.userId).select("_id name email role");
+		if (!user) return res.status(404).json({ message: "User not found" });
 
-    res.json(user);
+		res.json(user);
 	} catch (error) {
 		console.error("Profile fetch error:", error.message);
 		res.status(500).json({ message: "Server error", error: error.message });

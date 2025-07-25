@@ -7,16 +7,16 @@ import { loadStripe } from "@stripe/stripe-js";
 // import { useUserStore } from "../store/useUserStore";
 // import axios from "axios";
 import axiosInstance from "../lib/axios";
-  const stripePromise = loadStripe(
-	"pk_test_51RaWhqH9FCrDK0ULWAYDWcJzMJ5CWZuoUAXLgCR6KpPARhq3xNAtrbTuIyHpCW9yqhN9taojvfeSYGgyiysifzJK00dgL2QG55"
+const stripePromise = loadStripe(
+  "pk_test_51RaWhqH9FCrDK0ULWAYDWcJzMJ5CWZuoUAXLgCR6KpPARhq3xNAtrbTuIyHpCW9yqhN9taojvfeSYGgyiysifzJK00dgL2QG55"
 );
 
 export default function OrderSummary({ theme }) {
   const navigate = useNavigate();
   const { cart, total } = useCartStore();
   const clearCart = useCartStore((state) => state.clearCart)
-// const checkAuth = useUserStore((state) => state.checkAuth);
-const CartToStore  = useOrderStore((state) => state.CartToStore);
+  // const checkAuth = useUserStore((state) => state.checkAuth);
+  const CartToStore = useOrderStore((state) => state.CartToStore);
   // const handleBuyNow = async() => {
 
   // if (cart.length === 0) {
@@ -24,20 +24,20 @@ const CartToStore  = useOrderStore((state) => state.CartToStore);
   //   return;
   // }
   // const stripe = await stripePromise;
-	// 	const res = await fetch("http://localhost:5000/api/payments/create-checkout-session-bulk", {
-	// 		// products: cart,
+  // 	const res = await fetch("http://localhost:5000/api/payments/create-checkout-session-bulk", {
+  // 		// products: cart,
   //      method: "POST",
   // headers: {
   //   "Content-Type": "application/json",
   // },
   // body: JSON.stringify({ products: cart }),
-	// 	});
+  // 	});
   //   console.log("Checkout session response:", res);
   //   const session = res.data;
   //   console.log("Checkout session response:", session);
-	// 	const result = await stripe.redirectToCheckout({
-	// 		sessionId: session.id,
-	// 	});
+  // 	const result = await stripe.redirectToCheckout({
+  // 		sessionId: session.id,
+  // 	});
   // // Check if the user is logged in
   // const user = useOrderStore.getState().user;
   // if (!user) {
@@ -45,10 +45,10 @@ const CartToStore  = useOrderStore((state) => state.CartToStore);
   //   navigate("/login");
   //   return; 
   // }
-  
-	// 	if (result.error) {
-	// 		console.error("Error:", result.error);
-	// 	}
+
+  // 	if (result.error) {
+  // 		console.error("Error:", result.error);
+  // 	}
   // // Proceed to the bulk order confirmation page
   // console.log("Navigating to bulk order confirmation with cart:", cart, "and total:", total);
   // // You can also pass the user info if needed
@@ -65,20 +65,20 @@ const CartToStore  = useOrderStore((state) => state.CartToStore);
   // //   toast.error("Failed to process order. Please try again.");
   // // }
   // };
-const handleBuyNow = async () => {
- 
+  const handleBuyNow = async () => {
+
     try {
       //  CartToStore(cart);
       // const token = localStorage.getItem("accessToken"); // or get it from your auth store
-      const response = await axiosInstance.post('/api/payments/create-checkout-session-bulk', { cart },{ withCredentials: true } );
+      const response = await axiosInstance.post('/api/payments/create-checkout-session-bulk', { cart }, { withCredentials: true });
       window.location.href = response.data.url;
-      clearCart();
+
       // CartToStore(cart); // Save cart items to order store
       console.log("CartToStore called with cart:", cart);
     } catch (err) {
       console.error('Error redirecting to Stripe', err);
     }
-};
+  };
 
   return (
     <motion.div

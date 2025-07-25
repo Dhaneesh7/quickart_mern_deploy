@@ -10,18 +10,18 @@ import { useUserStore } from "../store/useUserStore";
 // import OrderSummary from "../components/OrderSummary";
 // import GiftCouponCard from "../components/GiftCouponCard";
 
-const CartPage = (id,theme) => {
-const user = useUserStore((state) => state.user);
+const CartPage = (id, theme) => {
+	const user = useUserStore((state) => state.user);
 	// This effect can be used to fetch cart items or perform any side effects		)
-	const { cart ,getCartItems,total} = useCartStore();
+	const { cart, getCartItems, total } = useCartStore();
 
 	useEffect(() => {
-	if (!user) {
+		if (!user) {
 			console.error("User not found, redirecting to login");
 			return;
-		}	
+		}
 		getCartItems();
-	},[getCartItems] );
+	}, [getCartItems]);
 	return (
 		<div className='py-8 md:py-16'>
 			<div className='mx-auto max-w-screen-xl px-4 2xl:px-0 '>
@@ -41,27 +41,27 @@ const user = useUserStore((state) => state.user);
 								))}
 
 								<div className='mt-6 flex items-right  font-bold justify-end border-t pt-4'>
-						Total : {total}
-									</div>
-							</div> 
+									Total : {total}
+								</div>
+							</div>
 						)}
-						
+
 					</motion.div>
 
-			
+
 				</div>
 				<br />
-						{cart.length > 0 && (
+				{cart.length > 0 && (
 					<motion.div
-							className='mx-auto mt-6 max-w-4xl space-y-6 lg:mt-0 lg:w-full'
-							initial={{ opacity: 0, x: 20 }}
-							animate={{ opacity: 1, x: 0 }}
-							transition={{ duration: 0.5, delay: 0.4 }}
-						>
-							 <OrderSummary />
-							{/* <GiftCouponCard />  */}
-						</motion.div>
-					)}
+						className='mx-auto mt-6 max-w-4xl space-y-6 lg:mt-0 lg:w-full'
+						initial={{ opacity: 0, x: 20 }}
+						animate={{ opacity: 1, x: 0 }}
+						transition={{ duration: 0.5, delay: 0.4 }}
+					>
+						<OrderSummary />
+						{/* <GiftCouponCard />  */}
+					</motion.div>
+				)}
 			</div>
 		</div>
 	);

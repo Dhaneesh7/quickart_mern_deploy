@@ -8,7 +8,7 @@ export const useOrderStore = create((set) => ({
   orders: [],
   addOrder: async (orderData) => {
     try {
-           const userId = useUserStore.getState().user?.id;
+      const userId = useUserStore.getState().user?.id;
       set({ loading: true });
       const response = await axiosInstance.post(`/api/orders/${userId}`, orderData); // adjust to your backend API
       set((state) => ({
@@ -18,13 +18,13 @@ export const useOrderStore = create((set) => ({
       return true;
     } catch (error) {
       console.error("Order failed:", error);
-      set({ loading: false }); 
+      set({ loading: false });
       return false;
     }
   },
   fetchOrders: async () => {
     try {
-                   const userId = useUserStore.getState().user?.id;
+      const userId = useUserStore.getState().user?.id;
 
       const response = await axiosInstance.get(`/api/orders/${userId}`);
       set({ orders: response.data });
@@ -36,7 +36,7 @@ export const useOrderStore = create((set) => ({
     const userId = useUserStore.getState().user?.id;
 
     const cartItems = useCartStore.getState().cart; // Assuming cart items are stored in user store
-        console.log("Cart items to store:", cartItems);
+    console.log("Cart items to store:", cartItems);
     if (cartItems.length === 0) {
       toast.error("Cart is empty");
       return false;
@@ -46,8 +46,8 @@ export const useOrderStore = create((set) => ({
       return false;
     }
     try {
-      const {data} = await axiosInstance.post(`/api/orders/cart/${userId}`, { cartItems:cartItems });
-      console.log("Response from CartToStore:",data);
+      const { data } = await axiosInstance.post(`/api/orders/cart/${userId}`, { cartItems: cartItems });
+      console.log("Response from CartToStore:", data);
       set((state) => ({
         orders: [...state.orders, ...data],
         // orders: [...state.orders, cartItems],
@@ -59,7 +59,7 @@ export const useOrderStore = create((set) => ({
     }
   },
 
-   removeOrderItem: async (orderId) => {
+  removeOrderItem: async (orderId) => {
     const userId = useUserStore.getState().user?.id;
     if (!userId) {
       toast.error("User not logged in");
@@ -67,7 +67,7 @@ export const useOrderStore = create((set) => ({
     }
     try {
       // Fix endpoint: your backend expects DELETE /carts/:userId with productId in body
-await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
+      await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
 
       set((prevState) => ({
         orders: prevState.orders.filter((item) => item._id !== orderId),

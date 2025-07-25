@@ -3,66 +3,67 @@ import { useUserStore } from "../store/useUserStore";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 const OrderConfirmationPage = () => {
-    const [searchParams] = useSearchParams();
-  const session_id = searchParams.get("session_id"); 
-// const{ session_id } = useParams();
+  const [searchParams] = useSearchParams();
+  const session_id = searchParams.get("session_id");
+  // const{ session_id } = useParams();
   const user = useUserStore((state) => state.user);
   const checkAuth = useUserStore((state) => state.checkAuth);
   const navigate = useNavigate();
-useEffect(() => {
-  async function load() {
-    try {
-      console.log("Fetching order confirmation for session_id:", session_id);
-    if (!session_id) {
-      console.error("No session_id found in URL");
-      navigate("/login");
-      return;
-    }
-    if (session_id) {
+  useEffect(() => {
+    async function load() {
+      try {
+        console.log("Fetching order confirmation for session_id:", session_id);
+        if (!session_id) {
+          console.error("No session_id found in URL");
+          navigate("/login");
+          return;
+        }
+        if (session_id) {
 
-      const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/orders/confirm?session_id=${session_id}`, {
-        credentials: 'include'
-      });
-            if (!res.ok) {
-        const errorText = await res.text();
-        console.error("Server returned error:", res.status, errorText);
+          const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/orders/confirm?session_id=${session_id}`, {
+            credentials: 'include'
+          });
+          if (!res.ok) {
+            const errorText = await res.text();
+            console.error("Server returned error:", res.status, errorText);
+            navigate("/login");
+            return;
+          }
+          // if(res.status !== 200) {
+          //   console.error("Failed to confirm order:", res.statusText);
+          //   navigate("/login");
+          //   return;
+          // }
+          // else if (res.status === 200) {
+          //   console.log("Order confirmed successfully");  
+          // }
+
+
+
+          const data = await res.json();
+          // const { user, order } = await res.json();
+          if (!data || !data.user || !data.order) {
+            console.error("Invalid response structure", data);
+            navigate("/login");
+            return;
+          }
+          console.log("User:", data.user);
+          console.log("Order:", data.order);
+          useUserStore.setState({ user: data.user });
+
+          // ✅ Re-check auth to sync session and trigger dependent effects
+          // await checkAuth();
+          // set state with user and order (order.line_items.data)
+          // useUserStore.setState({ user: data.user });
+
+        }
+      } catch (error) {
+        console.error("Error fetching order confirmation:", error);
         navigate("/login");
-        return;
       }
-      // if(res.status !== 200) {
-      //   console.error("Failed to confirm order:", res.statusText);
-      //   navigate("/login");
-      //   return;
-      // }
-      // else if (res.status === 200) {
-      //   console.log("Order confirmed successfully");  
-      // }
-
-      
-
-      const data = await res.json();
-      // const { user, order } = await res.json();
-         if (!data || !data.user || !data.order) {
-        console.error("Invalid response structure", data);
-        navigate("/login");
-        return;
-      }
-      console.log("User:", data.user);
-      console.log("Order:", data.order);
-         useUserStore.setState({ user: data.user });
-
-        // ✅ Re-check auth to sync session and trigger dependent effects
-        // await checkAuth();
-      // set state with user and order (order.line_items.data)
-      // useUserStore.setState({ user: data.user });
-
     }
-  }catch (error) {
-      console.error("Error fetching order confirmation:", error);
-      navigate("/login");
-    }}
-  load();
-}, [session_id]);
+    load();
+  }, [session_id]);
   // useEffect(() => {
   //   console.log("User at confirm page:", user);
   //   if (!user) {
@@ -70,7 +71,7 @@ useEffect(() => {
   //     navigate("/login");
   //   }
   // }, [user, navigate]);
-  
+
 
   if (!user) {
     return (

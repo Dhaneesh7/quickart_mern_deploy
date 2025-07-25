@@ -7,7 +7,7 @@ export const useCartStore = create((set, get) => ({
   // cart: [],
   // total: 0,
   // subtotal: 0,
-     ...initialState,
+  ...initialState,
   getCartItems: async () => {
     const userId = useUserStore.getState().user?.id;
     if (!userId) {
@@ -40,18 +40,18 @@ export const useCartStore = create((set, get) => ({
 
 
   clearCart: async () => {
-       const userId = useUserStore.getState().user?.id;
+    const userId = useUserStore.getState().user?.id;
     if (!userId) {
       toast.error("User not logged in");
       return;
     }
-     try {
+    try {
       // Fix endpoint: your backend expects DELETE /carts/:userId with productId in body
       await axiosInstance.delete(`/api/carts/all/${userId}`, { data: { productId } });
-   set({...initialState});
-     }catch{
-      
-     }
+      set({ ...initialState });
+    } catch {
+
+    }
   },
 
   addToCart: async (product) => {
@@ -59,15 +59,15 @@ export const useCartStore = create((set, get) => ({
       const userId = useUserStore.getState().user?.id;
       if (!userId) throw new Error("User not logged in");
 
-      await axiosInstance.post(`/api/carts/${userId}`, { productId: product._id,quantity: product.quantity ||1});
+      await axiosInstance.post(`/api/carts/${userId}`, { productId: product._id, quantity: product.quantity || 1 });
       toast.success("Product added to cart");
 
       set((prevState) => {
         const existingItem = prevState.cart.find((item) => item._id === product._id);
         const updatedCart = existingItem
           ? prevState.cart.map((item) =>
-              item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
-            )
+            item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+          )
           : [...prevState.cart, { ...product, quantity: 1 }];
         return { cart: updatedCart };
       });
