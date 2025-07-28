@@ -5,6 +5,7 @@ import { Loader, User, Mail, Phone } from "lucide-react";
 import { useOrderStore } from "../store/useOrderStore";
 import { loadStripe } from "@stripe/stripe-js";
 import { useEffect } from "react";
+import axiosInstance from "../lib/axios";
 const PlaceOrderPage = () => {
   const { product } = useParams();
   const [productData, setProductData] = useState(null);
