@@ -105,7 +105,7 @@ export const useUserStore = create(
 				try {
 					const response = await fetch("https://quickart-mern-deploy.onrender.com/api/auth/profile", { credentials: 'include' });
 					// set({ user: response.data, checkingAuth: false });
-					const u = response.json();
+					const u =await response.json();
 					console.log("response checkauth", u);
 
 					set({
