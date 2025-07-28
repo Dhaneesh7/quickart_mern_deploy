@@ -19,10 +19,12 @@ const OrderConfirmationPage = () => {
           return;
         }
         if (session_id) {
-
-          const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/orders/confirm?session_id=${session_id}`, {
-            credentials: 'include'
-          });
+            const res = await axiosInstance.get(`/api/orders/confirm?session_id=${session_id}`, {
+              withCredentials: true
+            });
+          // const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/orders/confirm?session_id=${session_id}`, {
+          //   credentials: 'include'
+          // });
           if (!res.ok) {
             const errorText = await res.text();
             console.error("Server returned error:", res.status, errorText);
