@@ -59,21 +59,23 @@ const PlaceOrderPage = () => {
     // }
     //with stripe
     try {
-      const res = await fetch("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // ✅ include cookies
-        body: JSON.stringify(orderData),
-      });
-      if (!res.ok) {
-        const errText = await res.text();
-        console.error("Failed to create checkout session:", res.status, errText);
-        return;
-      }
-
-      const data = await res.json();
+      // const res = await fetch("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   credentials: "include", // ✅ include cookies
+      //   body: JSON.stringify(orderData),
+      // });
+      // if (!res.ok) {
+      //   const errText = await res.text();
+      //   console.error("Failed to create checkout session:", res.status, errText);
+      //   return;
+      // }
+const res = await axiosInstance.post("/api/payments/create-checkout-session", orderData)
+      // const data = await res.json();
+      const data = res.data;
+      console.log("Checkout session created:", data);
 
       const stripe = await loadStripe("pk_test_51RaWhqH9FCrDK0ULWAYDWcJzMJ5CWZuoUAXLgCR6KpPARhq3xNAtrbTuIyHpCW9yqhN9taojvfeSYGgyiysifzJK00dgL2QG55");
       const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
