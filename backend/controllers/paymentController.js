@@ -147,7 +147,8 @@ console.log("Access Token:", req.cookies.accessToken);
       //   productId,
       //   quantity: qty.toString(),
       // },
-      success_url: `${process.env.CLIENT_URL}/orders/confirm?session_id={CHECKOUT_SESSION_ID}`,
+      // success_url: `${process.env.CLIENT_URL}/orders/confirm?session_id={CHECKOUT_SESSION_ID}`,
+      success_url:"https://quickart-mern-deploy.vercel.app/orders/confirm?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: `${process.env.CLIENT_URL}/orders/cancel`,
     });
 
