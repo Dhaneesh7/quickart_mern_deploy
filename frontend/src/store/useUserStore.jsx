@@ -100,23 +100,39 @@ export const useUserStore = create(
 				}
 			},
 
-			checkAuth: async () => {
-				set({ checkingAuth: true });
-				try {
-					const response = await fetch("https://quickart-mern-deploy.onrender.com/api/auth/profile", { credentials: 'include' });
-					// set({ user: response.data, checkingAuth: false });
-					const u =await response.json();
-					console.log("response checkauth", u);
+			// checkAuth: async () => {
+			// 	set({ checkingAuth: true });
+			// 	try {
+			// 		const response = await fetch("https://quickart-mern-deploy.onrender.com/api/auth/profile", { credentials: 'include' });
+			// 		// set({ user: response.data, checkingAuth: false });
+			// 		const u =await response.json();
+			// 		console.log("response checkauth", u);
 
-					set({
-						user: { id: u._id, name: u.name, email: u.email },
-						checkingAuth: false
-					});
-				} catch (error) {
-					console.log(error.message);
-					set({ checkingAuth: false, user: null });
-				}
-			},
+			// 		set({
+			// 			user: { id: u._id, name: u.name, email: u.email },
+			// 			checkingAuth: false
+			// 		});
+			// 	} catch (error) {
+			// 		console.log(error.message);
+			// 		set({ checkingAuth: false, user: null });
+			// 	}
+			// },
+checkAuth: async () => {
+  set({ checkingAuth: true });
+  try {
+    const response = await axiosInstance.get("/api/auth/profile", { withCredentials: true });
+    const u = response.data;
+    console.log("response checkauth", u);
+
+    set({
+      user: { id: u._id, name: u.name, email: u.email },
+      checkingAuth: false
+    });
+  } catch (error) {
+    console.log(error.message);
+    set({ checkingAuth: false, user: null });
+  }
+},
 
 			refreshToken: async () => {
 				// 		// Prevent multiple simultaneous refresh attempts
