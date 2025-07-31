@@ -26,12 +26,12 @@ const OrderConfirmationPage = () => {
           // const res = await fetch(`https://quickart-mern-deploy.onrender.com/api/orders/confirm?session_id=${session_id}`, {
           //   credentials: 'include'
           // });
-          if (!res.ok) {
-            const errorText = await res.text();
-            console.error("Server returned error:", res.status, errorText);
-            navigate("/login");
-            return;
-          }
+          // if (!res.ok) {
+          //   const errorText = await res.text();
+          //   console.error("Server returned error:", res.status, errorText);
+          //   navigate("/login");
+          //   return;
+          // }
           // if(res.status !== 200) {
           //   console.error("Failed to confirm order:", res.statusText);
           //   navigate("/login");
