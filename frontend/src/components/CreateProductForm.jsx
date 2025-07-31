@@ -10,16 +10,23 @@ const CreateProductForm = () => {
 		description: "",
 		price: "",
 		category: "",
-		image: "",
+		image: null,
 	});
 
 	const { createProduct, loading } = useProductStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		  const formData = new FormData();
+  formData.append("name", newProduct.name);
+  formData.append("description", newProduct.description);
+  formData.append("price", newProduct.price);
+  formData.append("category", newProduct.category);
+  formData.append("image", newProduct.image); // send actual file
+
 		try {
-			await createProduct(newProduct);
-			setNewProduct({ name: "", description: "", price: "", category: "", image: "" });
+			await createProduct(formData);
+			setNewProduct({ name: "", description: "", price: "", category: "", image: null});
 		} catch {
 			console.log("error creating a product");
 		}
@@ -28,13 +35,14 @@ const CreateProductForm = () => {
 	const handleImageChange = (e) => {
 		const file = e.target.files[0];
 		if (file) {
-			const reader = new FileReader();
+			// const reader = new FileReader();
 
-			reader.onloadend = () => {
-				setNewProduct({ ...newProduct, image: reader.result });
-			};
+			// reader.onloadend = () => {
+			// 	setNewProduct({ ...newProduct, image: reader.result });
+			// };
 
-			reader.readAsDataURL(file); // base64
+			// reader.readAsDataURL(file); // base64
+			setNewProduct({ ...newProduct, image: file }); // send actual file
 		}
 	};
 
