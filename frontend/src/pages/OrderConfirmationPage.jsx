@@ -43,7 +43,8 @@ const OrderConfirmationPage = () => {
 
 
 
-          const data = await res.json();
+          // const data = await res.json();
+          const data = res.data;
           // const { user, order } = await res.json();
           if (!data || !data.user || !data.order) {
             console.error("Invalid response structure", data);
