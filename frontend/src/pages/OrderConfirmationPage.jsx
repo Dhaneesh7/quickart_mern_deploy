@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useUserStore } from "../store/useUserStore";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import axiosInstance from "../lib/axios";
 
 const OrderConfirmationPage = () => {
   const [searchParams] = useSearchParams();
