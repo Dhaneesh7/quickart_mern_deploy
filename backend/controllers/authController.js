@@ -51,7 +51,8 @@ const setCookies = (res, accessToken, refreshToken) => {
 };
 
 const signup = async (req, res) => {
-	const { email, password, name, role ,adminCode } = req.body;
+	const { email, password, name ,adminCode } = req.body;
+	var role = req.body.role || "user"; // Default to user if not provided
 	try {
 		const userExists = await User.findOne({ email });
 
