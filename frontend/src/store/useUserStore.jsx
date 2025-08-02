@@ -13,7 +13,7 @@ export const useUserStore = create(
 			checkingAuth: true,
 			setUser: (user) => set({ user }),
 
-			signup: async ({ name, email, password, confirmPassword, role }) => {
+			signup: async ({ name, email, password, confirmPassword, role,adminCode }) => {
 				set({ loading: true });
 
 				if (password !== confirmPassword) {
@@ -22,7 +22,7 @@ export const useUserStore = create(
 				}
 
 				try {
-					const res = await axiosInstance.post("/api/auth/signup", { name, email, password, role }, { withCredentials: true });
+					const res = await axiosInstance.post("/api/auth/signup", { name, email, password, role ,adminCode}, { withCredentials: true });
 					if (res?.data) {
 						const user = res.data;
 						console.log("Signup response user:", user);
