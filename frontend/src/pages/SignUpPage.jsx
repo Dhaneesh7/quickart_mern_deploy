@@ -145,7 +145,7 @@ else {
                                   required
                                   value={formData.role}
                                   onChange={(e) =>{
-									const role = e.target.value; 
+									var role = e.target.value; 
 									setFormData({ ...formData, role });
 								    									if (role !== 'admin') {
 										setAdminCode(''); // Reset admin code if not admin
