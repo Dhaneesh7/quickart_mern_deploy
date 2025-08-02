@@ -61,7 +61,7 @@ const signup = async (req, res) => {
 		if(role === "admin" && !adminCode) {
 			return res.status(400).json({ message: "Admin code is required for admin role" });
 		}
-		if (role === "admin" && adminCode =="admin123") {
+		if (role === "admin" && adminCode =="admin124") {
 			role = "admin";
 		}
 		else{
