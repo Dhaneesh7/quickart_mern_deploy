@@ -52,7 +52,7 @@ const setCookies = (res, accessToken, refreshToken) => {
 
 const signup = async (req, res) => {
 	const { email, password, name ,adminCode } = req.body;
-	var role = req.body.role || "user"; // Default to user if not provided
+	var role = req.body.role || "customer"; // Default to user if not provided
 	try {
 		const userExists = await User.findOne({ email });
 
@@ -66,7 +66,7 @@ const signup = async (req, res) => {
 			role = "admin";
 		}
 		else{
-			role = "user"; // Default to user if not admin
+			role = "customer"; // Default to user if not admin
 		}
 
 		const user = await User.create({ name, email, password, role });
