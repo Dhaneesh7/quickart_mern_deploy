@@ -1,6 +1,6 @@
     const Product=require('../models/Product');
     const cloudinary = require("../config/cloudinary");
-
+const streamifier = require("streamifier");
     const getProducts=async (req,res)=>{
         try{const products=await Product.find();
         res.json(products);
@@ -8,38 +8,55 @@
         res.status(500).json({message:"failed to fetch",err})
     }
     };
-    // const insertProducts=async (req,res)=>{
-        
-    //     try{
+    
+//    const insertProducts = async (req, res) => {
+//   try {
+//     const { name, price, description, category } = req.body;
+//     const { userId } = req.params;
 
-    //         const{name,price,description,category}=req.body;
-    //             const { userId } = req.params;
+//     let imageUrl = "";
+//     if (req.file) {
+//       const result = await cloudinary.uploader.upload(req.file.path, {
+//         folder: "products"
+//       });
+//       imageUrl = result.secure_url;
+//     }
 
-    // let imageUrl = "";
-    // if (req.file) {
-    //   const result = await cloudinary.uploader.upload(req.file.path, {
-    //     folder: "products"
-    //   });
-    //   imageUrl = result.secure_url;
-    // }
+//     const product = await Product.create({
+//       name,
+//       price,
+//       description,
+//       image: imageUrl, // ✅ use imageUrl, not imagePath
+//       category,
+//       createdBy: userId,
+//     });
 
+//     res.json(product);
+//   } catch (err) {
+//     res.status(500).json({ message: "failed to insert", error: err.message });
+//   }
+// };
 
-    //     const products=await Product.create({name,price,description,image: imagePath,category, createdBy: userId, });
-    //         // await products.save();
-    //     res.json(products);
-    // }catch(err){
-    //     res.status(500).json({message:"failed to insert",error: err.message})
-    // }
-    // };
-   const insertProducts = async (req, res) => {
+const insertProducts = async (req, res) => {
   try {
     const { name, price, description, category } = req.body;
     const { userId } = req.params;
 
+    if (!name || !price || !category) {
+      return res.status(400).json({ message: "Name, price, and category are required" });
+    }
+
     let imageUrl = "";
     if (req.file) {
-      const result = await cloudinary.uploader.upload(req.file.path, {
-        folder: "products"
+      const result = await new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+          { folder: "products" },
+          (error, result) => {
+            if (error) return reject(error);
+            resolve(result);
+          }
+        );
+        streamifier.createReadStream(req.file.buffer).pipe(stream);
       });
       imageUrl = result.secure_url;
     }
@@ -48,14 +65,15 @@
       name,
       price,
       description,
-      image: imageUrl, // ✅ use imageUrl, not imagePath
       category,
+      image: imageUrl,
       createdBy: userId,
     });
 
     res.json(product);
   } catch (err) {
-    res.status(500).json({ message: "failed to insert", error: err.message });
+    console.error(err);
+    res.status(500).json({ message: "Failed to insert product", error: err.message });
   }
 };
 
