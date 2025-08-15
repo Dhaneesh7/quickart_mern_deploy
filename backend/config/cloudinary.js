@@ -6,5 +6,4 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
     secure: true,
 });
-
-export default cloudinary;
+module.exports = cloudinary; // ✅ export the cloudinary obje
