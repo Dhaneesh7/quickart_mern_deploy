@@ -1,4 +1,6 @@
-    const Product=require('../models/Product')
+    const Product=require('../models/Product');
+    const cloudinary = require("../config/cloudinary");
+
     const getProducts=async (req,res)=>{
         try{const products=await Product.find();
         res.json(products);
@@ -6,14 +8,35 @@
         res.status(500).json({message:"failed to fetch",err})
     }
     };
-    const insertProducts=async (req,res)=>{
+    // const insertProducts=async (req,res)=>{
         
-        try{
+    //     try{
 
-            const{name,price,description,category}=req.body;
-                const { userId } = req.params;
+    //         const{name,price,description,category}=req.body;
+    //             const { userId } = req.params;
 
-    let imageUrl = null;
+    // let imageUrl = "";
+    // if (req.file) {
+    //   const result = await cloudinary.uploader.upload(req.file.path, {
+    //     folder: "products"
+    //   });
+    //   imageUrl = result.secure_url;
+    // }
+
+
+    //     const products=await Product.create({name,price,description,image: imagePath,category, createdBy: userId, });
+    //         // await products.save();
+    //     res.json(products);
+    // }catch(err){
+    //     res.status(500).json({message:"failed to insert",error: err.message})
+    // }
+    // };
+   const insertProducts = async (req, res) => {
+  try {
+    const { name, price, description, category } = req.body;
+    const { userId } = req.params;
+
+    let imageUrl = "";
     if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "products"
@@ -21,14 +44,21 @@
       imageUrl = result.secure_url;
     }
 
+    const product = await Product.create({
+      name,
+      price,
+      description,
+      image: imageUrl, // ✅ use imageUrl, not imagePath
+      category,
+      createdBy: userId,
+    });
 
-        const products=await Product.create({name,price,description,image: imagePath,category, createdBy: userId, });
-            // await products.save();
-        res.json(products);
-    }catch(err){
-        res.status(500).json({message:"failed to insert",error: err.message})
-    }
-    };
+    res.json(product);
+  } catch (err) {
+    res.status(500).json({ message: "failed to insert", error: err.message });
+  }
+};
+
     const getProductsByCategory =async (req,res)=>{
         try{
             const{ category}=req.params;
