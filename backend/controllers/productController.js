@@ -47,7 +47,7 @@ const insertProducts = async (req, res) => {
     }
 console.log("req.file:", req.file);
 
-    var imageUrl = "";
+     let imageUrl = ""; //
     if (req.file) {
       const result = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(

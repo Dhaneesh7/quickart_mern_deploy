@@ -10,7 +10,11 @@ router.get('/',productController.getProducts);
 
 // router.get("/category/:category", productControllerByCategory);
 router.get('/id/:productId',productController.getProductById);//full card in frontend
-router.post('/:userId',upload.single("image"),productController.insertProducts);
+router.post('/:userId',upload.single("image"), (req, res, next) => {
+  console.log("Multer file object:", req.file);
+  next();
+}, 
+productController.insertProducts);
 router.delete('/:productId', productController.deleteProduct);
 
 router.get('/category/:category',productController.getProductsByCategory)
