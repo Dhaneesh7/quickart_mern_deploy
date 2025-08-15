@@ -45,8 +45,9 @@ const insertProducts = async (req, res) => {
     if (!name || !price || !category) {
       return res.status(400).json({ message: "Name, price, and category are required" });
     }
+console.log("req.file:", req.file);
 
-    let imageUrl = "";
+    var imageUrl = "";
     if (req.file) {
       const result = await new Promise((resolve, reject) => {
         const stream = cloudinary.uploader.upload_stream(
