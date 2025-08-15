@@ -1,5 +1,6 @@
 // routes/productRoutes.js
 const express = require('express');
+const upload = require("../middleware/upload");
 const router = express.Router();
 const Admin=require('../middleware/Auth_Middleware');
 // import { adminRoute,protectRoute } from '../middleware/Auth_Middleware';
@@ -9,7 +10,7 @@ router.get('/',getProducts.getProducts);
 
 // router.get("/category/:category", getProductsByCategory);
 router.get('/id/:productId',getProducts.getProductById);//full card in frontend
-router.post('/:userId',getProducts.insertProducts);
+router.post('/:userId',upload.single("image"),getProducts.insertProducts);
 router.delete('/:productId', getProducts.deleteProduct);
 
 router.get('/category/:category',getProducts.getProductsByCategory)

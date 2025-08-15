@@ -45,6 +45,8 @@ app.use('/api/user', UserRoutes)
 app.use("/api/auth", authRoutes);
 app.use('/api/orders', OrderRoutes)
 app.use('/api/payments', paymentroutes)
+app.use("/uploads", express.static("uploads"));
+
 
 const PORT = parseInt(process.env.PORT, 10) || 5000
 app.listen(PORT, '0.0.0.0', () => console.log(`Server started on port ${PORT}`));

@@ -53,11 +53,11 @@ if (newProduct.imageFile && newProduct.imageUrl) {
 			// };
 
 			// reader.readAsDataURL(file); // base64
-			setNewProduct({ ...newProduct, imageFile: file }); // send actual file
+			setNewProduct({ ...newProduct, imageFile: file, imageUrl: ""  }); // send actual file
 		}
 	};
 	const handleImageUrlChange = (e) => {
-  setNewProduct({ ...newProduct, imageUrl: e.target.value });
+  setNewProduct({ ...newProduct, imageUrl: e.target.value, imageFile: null });
 };
 
 	return (

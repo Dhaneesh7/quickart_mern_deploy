@@ -10,9 +10,15 @@
         
         try{
 
-            const{name,price,description,image,category}=req.body;
-                const { userId } = req.params
-        const products=await Product.create({name,price,description,image,category, createdBy: userId, });
+            const{name,price,description,category,imageUrl}=req.body;
+                const { userId } = req.params;
+                
+    let imagePath = imageUrl; // default: use provided URL
+    if (req.file) {
+      imagePath = `/uploads/${req.file.filename}`; // if file uploaded
+    }
+
+        const products=await Product.create({name,price,description,image: imagePath,category, createdBy: userId, });
             // await products.save();
         res.json(products);
     }catch(err){
