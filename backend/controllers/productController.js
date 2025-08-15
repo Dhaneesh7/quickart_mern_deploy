@@ -10,13 +10,17 @@
         
         try{
 
-            const{name,price,description,category,imageUrl}=req.body;
+            const{name,price,description,category}=req.body;
                 const { userId } = req.params;
-                
-    let imagePath = imageUrl; // default: use provided URL
+
+    let imageUrl = null;
     if (req.file) {
-      imagePath = `/uploads/${req.file.filename}`; // if file uploaded
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "products"
+      });
+      imageUrl = result.secure_url;
     }
+
 
         const products=await Product.create({name,price,description,image: imagePath,category, createdBy: userId, });
             // await products.save();
