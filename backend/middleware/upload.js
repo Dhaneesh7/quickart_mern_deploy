@@ -1,7 +1,7 @@
 const multer = require("multer");
 const path = require("path");
 
-// Store file in memory (good for Cloudinary)
+// Memory storage (needed for Cloudinary upload_stream)
 const storage = multer.memoryStorage();
 
 const upload = multer({
@@ -13,7 +13,7 @@ const upload = multer({
     if (mimetype && extname) {
       return cb(null, true);
     }
-    cb("Error: Images Only!");
+    cb(new Error("Only images are allowed"));
   },
 });
 
