@@ -18,6 +18,7 @@
     "ioredis": "^5.6.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.3",
+    "multer": "^2.0.2",
     "stripe": "^18.3.0"
   }
 }
