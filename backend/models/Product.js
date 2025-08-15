@@ -6,10 +6,8 @@ const productSchema = new mongoose.Schema({
   description: { type: String },
   price: { type: Number },
   category: { type: String },
-  image: {
-    data: Buffer,
-    contentType: String
-  }
+image: { type: String } // Store file path
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);
