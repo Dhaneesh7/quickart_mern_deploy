@@ -10,7 +10,8 @@ const CreateProductForm = () => {
 		description: "",
 		price: "",
 		category: "",
-		image: null,
+		imageFile: null,
+		imageUrl: "",
 	});
 
 	const { createProduct, loading } = useProductStore();
@@ -22,11 +23,21 @@ const CreateProductForm = () => {
   formData.append("description", newProduct.description);
   formData.append("price", newProduct.price);
   formData.append("category", newProduct.category);
-  formData.append("image", newProduct.image); // send actual file
+//   formData.append("image", newProduct.image); // send actual file
+if (newProduct.imageFile && newProduct.imageUrl) {
+  alert("Please choose either a file OR an image URL, not both.");
+  return;
+}
+
+  if (newProduct.imageFile) {
+    formData.append("image", newProduct.imageFile);
+  } else if (newProduct.imageUrl) {
+    formData.append("imageUrl", newProduct.imageUrl);
+  }
 
 		try {
 			await createProduct(formData);
-			setNewProduct({ name: "", description: "", price: "", category: "", image: null});
+			setNewProduct({ name: "", description: "", price: "", category: "", imageFile: null,imageUrl:""});
 		} catch {
 			console.log("error creating a product");
 		}
@@ -42,9 +53,12 @@ const CreateProductForm = () => {
 			// };
 
 			// reader.readAsDataURL(file); // base64
-			setNewProduct({ ...newProduct, image: file }); // send actual file
+			setNewProduct({ ...newProduct, imageFile: file }); // send actual file
 		}
 	};
+	const handleImageUrlChange = (e) => {
+  setNewProduct({ ...newProduct, imageUrl: e.target.value });
+};
 
 	return (
 		<motion.div
@@ -131,7 +145,7 @@ const CreateProductForm = () => {
 					</select>
 				</div>
 
-				<div className='mt-1 flex items-center'>
+				{/* <div className='mt-1 flex items-center'>
 					<input type='file' id='image' className='sr-only' accept='image/*' onChange={handleImageChange} />
 					<label
 						htmlFor='image'
@@ -158,7 +172,47 @@ const CreateProductForm = () => {
 						 focus:border-blue-500'
 						required
 					/>
-				</div>
+				</div> */}
+				{/* File Upload */}
+<div className='mt-1 flex items-center'>
+  <input
+    type='file'
+    id='imageFile'
+    className='sr-only'
+    accept='image/*'
+    onChange={handleImageChange}
+  />
+  <label
+    htmlFor='imageFile'
+    className='cursor-pointer bg-gray-700 py-2 px-3 border border-gray-600 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-300 hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500'
+  >
+    <Upload className='h-5 w-5 inline-block mr-2' />
+    Upload Image
+  </label>
+  {newProduct.imageFile && (
+    <span className='ml-3 text-sm text-gray-400'>
+      {newProduct.imageFile.name} uploaded
+    </span>
+  )}
+</div>
+
+{/* Image URL */}
+<div>
+  <label htmlFor='imageUrl' className='block text-sm font-medium text-gray-300'>
+    Image URL
+  </label>
+  <input
+    type='text'
+    id='imageUrl'
+    name='imageUrl'
+    value={newProduct.imageUrl}
+    onChange={handleImageUrlChange}
+    className='mt-1 block w-full bg-gray-700 border border-gray-600 rounded-md shadow-sm 
+      py-2 px-3 text-white focus:outline-none focus:ring-2 focus:ring-blue-500
+      focus:border-blue-500'
+  />
+</div>
+
 
 				<button
 					type='submit'
