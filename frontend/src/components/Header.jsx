@@ -14,7 +14,7 @@ import { useUserStore } from "../store/useUserStore";
 import { useCartStore } from "../store/useCartStore";
 import { useOrderStore } from "../store/useOrderStore";
 import ThemeToggle from "./ThemeToggle";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const Header = ({ toggleTheme, theme, products = [] }) => {
   const { user, logout } = useUserStore();
@@ -30,6 +30,8 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
   const [showSearch, setShowSearch] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
+
+  const searchRef = useRef(null);
 
   const handlelogout = async () => {
     try {
@@ -56,6 +58,18 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
     setSearchTerm("");
     setFilteredProducts([]);
   };
+
+  // Close search when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchRef.current && !searchRef.current.contains(e.target)) {
+        setFilteredProducts([]);
+        setShowSearch(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -119,68 +133,65 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
                   )}
                 </Link>
 
-                {/* Search toggle */}
-                <button
-                  onClick={() => setShowSearch(!showSearch)}
-                  className="hover:text-blue-400 flex items-center"
-                >
-                  <Search size={20} className="mr-1" />
-                  <span className="hidden sm:inline">Search</span>
-                </button>
+                {/* Search */}
+                <div className="relative" ref={searchRef}>
+                  <button
+                    onClick={() => setShowSearch(!showSearch)}
+                    className="hover:text-blue-400 flex items-center"
+                  >
+                    <Search size={20} className="mr-1" />
+                    <span className="hidden sm:inline">Search</span>
+                  </button>
 
-                {/* Search input + results */}
-                {showSearch && (
-                  <div className="relative">
-                    <form
-                      onSubmit={handleSearch}
-                      className="flex items-center gap-2"
-                    >
-                      <input
-                        type="text"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                        className="px-2 py-1 rounded-md text-black"
-                        placeholder="Search products..."
-                        autoFocus
-                      />
-                      {searchTerm && (
-                        <button
-                          type="button"
-                          onClick={handleClearSearch}
-                          className="text-red-500 font-bold"
-                        >
-                          ✕
-                        </button>
-                      )}
-                      <button
-                        type="submit"
-                        className="bg-blue-600 px-3 py-1 rounded-md text-white"
+                  {showSearch && (
+                    <div className="absolute top-10 left-0 bg-white text-black shadow-lg rounded-md p-3 w-72">
+                      <form
+                        onSubmit={handleSearch}
+                        className="flex items-center gap-2"
                       >
-                        Go
-                      </button>
-                    </form>
-
-                    {/* Search dropdown results */}
-                    {filteredProducts.length > 0 && (
-                      <div className="absolute left-0 mt-2 w-64 bg-white text-black shadow-lg rounded-md max-h-60 overflow-y-auto">
-                        {filteredProducts.map((p) => (
-                          <Link
-                            key={p.id}
-                            to={`/product/${p.id}`}
-                            className="block px-4 py-2 hover:bg-gray-200"
-                            onClick={() => {
-                              setShowSearch(false);
-                              setSearchTerm("");
-                              setFilteredProducts([]);
-                            }}
+                        <input
+                          type="text"
+                          value={searchTerm}
+                          onChange={(e) => setSearchTerm(e.target.value)}
+                          className="px-2 py-1 rounded-md border w-full"
+                          placeholder="Search products..."
+                          autoFocus
+                        />
+                        {searchTerm && (
+                          <button
+                            type="button"
+                            onClick={handleClearSearch}
+                            className="text-red-500 font-bold"
                           >
-                            {p.name}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
+                            ✕
+                          </button>
+                        )}
+                      </form>
+
+                      {/* Search results */}
+                      {filteredProducts.length > 0 && (
+                        <div className="mt-2 max-h-60 overflow-y-auto">
+                          {filteredProducts.map((p) => (
+                            <Link
+                              key={p.id}
+                              to={`/product/${p.id}`}
+                              className="block px-4 py-2 hover:bg-gray-200 rounded"
+                              onClick={() => {
+                                setShowSearch(false);
+                                handleClearSearch();
+                              }}
+                            >
+                              {p.name}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                      {searchTerm && filteredProducts.length === 0 && (
+                        <p className="text-sm text-gray-500 mt-2">No products found.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 <ThemeToggle />
               </>
@@ -245,6 +256,95 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
+		  {isOpen && (
+  <nav className="md:hidden mt-3 space-y-3 bg-blue-900 text-white rounded-lg shadow-lg p-4">
+    <Link to="/" className="block hover:text-blue-400">Home</Link>
+
+    {user && (
+      <>
+        <Link to="/cart" className="block hover:text-blue-400">
+          <ShoppingCart size={20} className="inline-block mr-1" />
+          Cart
+          {cart.length > 0 && (
+            <span className="ml-2 bg-blue-500 text-white rounded-full px-2 py-0.5 text-xs">
+              {cart.length}
+            </span>
+          )}
+        </Link>
+
+        <Link to="/orders" className="block hover:text-blue-400">
+          <Package size={20} className="inline-block mr-1" />
+          Orders
+          {orderItems?.length > 0 && (
+            <span className="ml-2 bg-green-500 text-white rounded-full px-2 py-0.5 text-xs">
+              {orderItems.length}
+            </span>
+          )}
+        </Link>
+
+        <button
+          onClick={() => setShowSearch(!showSearch)}
+          className="block hover:text-blue-400"
+        >
+          <Search size={20} className="inline-block mr-1" />
+          Search
+        </button>
+
+        <ThemeToggle />
+      </>
+    )}
+
+    {isAdmin && (
+      <Link
+        to="/secret-dashboard"
+        className="block bg-blue-700 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
+      >
+        <Lock size={18} className="inline-block mr-1" />
+        Dashboard
+      </Link>
+    )}
+
+    {user ? (
+      <button
+        onClick={handlelogout}
+        className="block bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
+      >
+        <LogOut size={18} className="inline-block mr-1" />
+        Log Out
+      </button>
+    ) : (
+      <>
+        <Link
+          to="/signup"
+          className="block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+        >
+          <UserPlus size={18} className="inline-block mr-2" />
+          Sign Up
+        </Link>
+        <Link
+          to="/login"
+          className="block bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
+        >
+          <LogIn size={18} className="inline-block mr-2" />
+          Login
+        </Link>
+        <button
+          onClick={toggleTheme}
+          className="block w-full mt-2 px-4 py-2 border rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white"
+        >
+          {theme === "dark" ? "Light Mode" : "Dark Mode"}
+        </button>
+        <Link
+          to="/about"
+          className="block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md mt-2"
+        >
+          About
+        </Link>
+      </>
+    )}
+  </nav>
+)}
+
         </div>
       </div>
     </header>
