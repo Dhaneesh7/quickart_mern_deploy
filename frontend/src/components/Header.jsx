@@ -282,13 +282,13 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
           )}
         </Link>
 
-        <button
-          onClick={() => setShowSearch(!showSearch)}
+        <Link to="/search"
+        //   onClick={() => setShowSearch(!showSearch)}
           className="block hover:text-blue-400"
         >
           <Search size={20} className="inline-block mr-1" />
           Search
-        </button>
+        </Link>
 
         <ThemeToggle />
       </>
