@@ -74,8 +74,8 @@ const PlaceOrderPage = () => {
       //   return;
       // }
 const res = await axiosInstance.post("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", orderData)
-      const data = await res.json();
-      // const data = res.data;
+      // const data = await res.json();
+      const data = res.data;
       //  const res = await fetch("https://quickart-mern-deploy.onrender.com/api/payments/create-checkout-session", {
     //   method: "POST",
     //   headers: {
