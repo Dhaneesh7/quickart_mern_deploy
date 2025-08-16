@@ -13,6 +13,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/useUserStore";
 import { useCartStore } from "../store/useCartStore";
 import { useOrderStore } from "../store/useOrderStore";
+import { useProductStore } from "../store/useProductStore";
 import ThemeToggle from "./ThemeToggle";
 import { useEffect, useState, useRef } from "react";
 
