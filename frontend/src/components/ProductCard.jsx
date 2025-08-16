@@ -49,9 +49,7 @@ const fullcard = () =>{
         if (e.key === "Enter") fullcard();
       }}>
 			<div className='relative mx-3 mt-3 flex h-60 overflow-hidden rounded-xl'>
-				<img className='object-cover w-60 bg-gray-400' src={product.image.startsWith("data:image")
-      ? product.image
-      : `${import.meta.env.VITE_API_URL}/uploads/${product.image}`} alt='product image' />
+				<img className='object-cover w-60 bg-gray-400' src={product.image} alt='product image' />
 				{/* <div className='absolute inset-0 bg-black bg-opacity-20' /> */}
 			</div>
 
