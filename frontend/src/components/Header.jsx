@@ -258,7 +258,7 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
           </button>
 {/* Mobile Menu Dropdown */}
 {isOpen && (
-  <div className="absolute top-16 left-0 w-1/2 bg-blue-900 text-white shadow-lg md:hidden z-50">
+  <div className="absolute top-16 left-0 w-20 bg-blue-900 text-white shadow-lg md:hidden z-50">
     <nav className="flex flex-col space-y-3 p-4">
       <Link to="/" className="hover:text-blue-400">Home</Link>
 
@@ -279,13 +279,13 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
             Orders
           </Link>
 
-          <button
+          <Link to="/search"
             onClick={() => setShowSearch(!showSearch)}
             className="hover:text-blue-400 text-left"
           >
             <Search size={20} className="inline-block mr-1" />
             Search
-          </button>
+          </Link>
 
           <ThemeToggle />
         </>
