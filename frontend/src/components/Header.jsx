@@ -16,7 +16,8 @@ import { useOrderStore } from "../store/useOrderStore";
 import ThemeToggle from "./ThemeToggle";
 import { useEffect, useState, useRef } from "react";
 
-const Header = ({ toggleTheme, theme, products = [] }) => {
+const Header = ({ toggleTheme, theme }) => {
+	
   const { user, logout } = useUserStore();
   const navigate = useNavigate();
   const isAdmin = user?.role === "admin";
@@ -32,7 +33,15 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   const searchRef = useRef(null);
+const { fetchAllProducts,products } = useProductStore();
+	console.log("products", products);
 
+
+	
+	useEffect(() => {
+		fetchAllProducts();
+	}, []);
+	
   const handlelogout = async () => {
     try {
       await logout();
