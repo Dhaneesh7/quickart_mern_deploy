@@ -16,7 +16,7 @@ import { useOrderStore } from "../store/useOrderStore";
 import ThemeToggle from "./ThemeToggle";
 import { useEffect, useState } from "react";
 
-const Header = ({ toggleTheme, theme }) => {
+const Header = ({ toggleTheme, theme, products = [] }) => {
   const { user, logout } = useUserStore();
   const navigate = useNavigate();
   const isAdmin = user?.role === "admin";
@@ -25,8 +25,11 @@ const Header = ({ toggleTheme, theme }) => {
 
   const [isThemeSet, setIsThemeSet] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+
+  // Search States
   const [showSearch, setShowSearch] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState([]);
 
   const handlelogout = async () => {
     try {
@@ -39,11 +42,19 @@ const Header = ({ toggleTheme, theme }) => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?query=${searchQuery}`);
-      setShowSearch(false);
-      setSearchQuery("");
+    if (!searchTerm.trim()) {
+      setFilteredProducts([]);
+      return;
     }
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    setFilteredProducts([]);
   };
 
   useEffect(() => {
@@ -82,12 +93,11 @@ const Header = ({ toggleTheme, theme }) => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-4">
-            <Link to="/" className="hover:text-blue-400">
-              Home
-            </Link>
+            <Link to="/" className="hover:text-blue-400">Home</Link>
 
             {user && (
               <>
+                {/* Cart */}
                 <Link to="/cart" className="relative hover:text-blue-400">
                   <ShoppingCart size={20} className="inline-block mr-1" />
                   <span className="hidden sm:inline">Cart</span>
@@ -98,6 +108,7 @@ const Header = ({ toggleTheme, theme }) => {
                   )}
                 </Link>
 
+                {/* Orders */}
                 <Link to="/orders" className="relative hover:text-blue-400">
                   <Package size={20} className="inline-block mr-1" />
                   <span className="hidden sm:inline">Orders</span>
@@ -108,7 +119,7 @@ const Header = ({ toggleTheme, theme }) => {
                   )}
                 </Link>
 
-                {/* Search toggle button */}
+                {/* Search toggle */}
                 <button
                   onClick={() => setShowSearch(!showSearch)}
                   className="hover:text-blue-400 flex items-center"
@@ -117,30 +128,65 @@ const Header = ({ toggleTheme, theme }) => {
                   <span className="hidden sm:inline">Search</span>
                 </button>
 
-                {/* Search input (desktop only) */}
+                {/* Search input + results */}
                 {showSearch && (
-                  <form onSubmit={handleSearch} className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      className="px-2 py-1 rounded-md text-black"
-                      placeholder="Search products..."
-                      autoFocus
-                    />
-                    <button
-                      type="submit"
-                      className="bg-blue-600 px-3 py-1 rounded-md text-white"
+                  <div className="relative">
+                    <form
+                      onSubmit={handleSearch}
+                      className="flex items-center gap-2"
                     >
-                      Go
-                    </button>
-                  </form>
+                      <input
+                        type="text"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="px-2 py-1 rounded-md text-black"
+                        placeholder="Search products..."
+                        autoFocus
+                      />
+                      {searchTerm && (
+                        <button
+                          type="button"
+                          onClick={handleClearSearch}
+                          className="text-red-500 font-bold"
+                        >
+                          ✕
+                        </button>
+                      )}
+                      <button
+                        type="submit"
+                        className="bg-blue-600 px-3 py-1 rounded-md text-white"
+                      >
+                        Go
+                      </button>
+                    </form>
+
+                    {/* Search dropdown results */}
+                    {filteredProducts.length > 0 && (
+                      <div className="absolute left-0 mt-2 w-64 bg-white text-black shadow-lg rounded-md max-h-60 overflow-y-auto">
+                        {filteredProducts.map((p) => (
+                          <Link
+                            key={p.id}
+                            to={`/product/${p.id}`}
+                            className="block px-4 py-2 hover:bg-gray-200"
+                            onClick={() => {
+                              setShowSearch(false);
+                              setSearchTerm("");
+                              setFilteredProducts([]);
+                            }}
+                          >
+                            {p.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 )}
 
                 <ThemeToggle />
               </>
             )}
 
+            {/* Admin */}
             {isAdmin && (
               <Link
                 to="/secret-dashboard"
@@ -151,6 +197,7 @@ const Header = ({ toggleTheme, theme }) => {
               </Link>
             )}
 
+            {/* Auth */}
             {user ? (
               <button
                 onClick={handlelogout}
@@ -200,57 +247,6 @@ const Header = ({ toggleTheme, theme }) => {
           </button>
         </div>
       </div>
-
-      {/* Mobile Menu */}
-      {isOpen && (
-        <div className="md:hidden flex flex-col bg-blue-900 text-white px-6 py-4 space-y-4 animate-slideDown">
-          <Link to="/" onClick={() => setIsOpen(false)}>
-            Home
-          </Link>
-          {user && (
-            <>
-              <Link to="/cart" onClick={() => setIsOpen(false)}>
-                Cart ({cart.length})
-              </Link>
-              <Link to="/orders" onClick={() => setIsOpen(false)}>
-                Orders ({orderItems?.length || 0})
-              </Link>
-              <Link to="/search" onClick={() => setIsOpen(false)}>
-                Search
-              </Link>
-              <ThemeToggle />
-            </>
-          )}
-          {isAdmin && (
-            <Link to="/secret-dashboard" onClick={() => setIsOpen(false)}>
-              Dashboard
-            </Link>
-          )}
-          {user ? (
-            <button
-              onClick={() => {
-                setIsOpen(false);
-                handlelogout();
-              }}
-              className="w-full text-left bg-gray-700 hover:bg-gray-600 px-3 py-2 rounded-md"
-            >
-              Logout
-            </button>
-          ) : (
-            <>
-              <Link to="/signup" onClick={() => setIsOpen(false)}>
-                Sign Up
-              </Link>
-              <Link to="/login" onClick={() => setIsOpen(false)}>
-                Login
-              </Link>
-              <Link to="/about" onClick={() => setIsOpen(false)}>
-                About
-              </Link>
-            </>
-          )}
-        </div>
-      )}
     </header>
   );
 };
