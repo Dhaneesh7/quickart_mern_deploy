@@ -1,4 +1,14 @@
-import { ShoppingCart, UserPlus, LogIn, LogOut, Lock, Package, Search, Menu, X } from "lucide-react";
+import {
+  ShoppingCart,
+  UserPlus,
+  LogIn,
+  LogOut,
+  Lock,
+  Package,
+  Search,
+  Menu,
+  X,
+} from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserStore } from "../store/useUserStore";
 import { useCartStore } from "../store/useCartStore";
@@ -15,6 +25,8 @@ const Header = ({ toggleTheme, theme }) => {
 
   const [isThemeSet, setIsThemeSet] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handlelogout = async () => {
     try {
@@ -22,6 +34,15 @@ const Header = ({ toggleTheme, theme }) => {
       navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
+    }
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?query=${searchQuery}`);
+      setShowSearch(false);
+      setSearchQuery("");
     }
   };
 
@@ -61,7 +82,9 @@ const Header = ({ toggleTheme, theme }) => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-4">
-            <Link to="/" className="hover:text-blue-400">Home</Link>
+            <Link to="/" className="hover:text-blue-400">
+              Home
+            </Link>
 
             {user && (
               <>
@@ -85,10 +108,34 @@ const Header = ({ toggleTheme, theme }) => {
                   )}
                 </Link>
 
-                <Link to="/search" className="hover:text-blue-400 flex items-center">
+                {/* Search toggle button */}
+                <button
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="hover:text-blue-400 flex items-center"
+                >
                   <Search size={20} className="mr-1" />
                   <span className="hidden sm:inline">Search</span>
-                </Link>
+                </button>
+
+                {/* Search input (desktop only) */}
+                {showSearch && (
+                  <form onSubmit={handleSearch} className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="px-2 py-1 rounded-md text-black"
+                      placeholder="Search products..."
+                      autoFocus
+                    />
+                    <button
+                      type="submit"
+                      className="bg-blue-600 px-3 py-1 rounded-md text-white"
+                    >
+                      Go
+                    </button>
+                  </form>
+                )}
 
                 <ThemeToggle />
               </>
@@ -156,13 +203,21 @@ const Header = ({ toggleTheme, theme }) => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden flex flex-row bg-blue-900 text-white px-6 py-4 space-y-4 animate-slideDown">
-          <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
+        <div className="md:hidden flex flex-col bg-blue-900 text-white px-6 py-4 space-y-4 animate-slideDown">
+          <Link to="/" onClick={() => setIsOpen(false)}>
+            Home
+          </Link>
           {user && (
             <>
-              <Link to="/cart" onClick={() => setIsOpen(false)}>Cart ({cart.length})</Link>
-              <Link to="/orders" onClick={() => setIsOpen(false)}>Orders ({orderItems?.length || 0})</Link>
-              <Link to="/search" onClick={() => setIsOpen(false)}>Search</Link>
+              <Link to="/cart" onClick={() => setIsOpen(false)}>
+                Cart ({cart.length})
+              </Link>
+              <Link to="/orders" onClick={() => setIsOpen(false)}>
+                Orders ({orderItems?.length || 0})
+              </Link>
+              <Link to="/search" onClick={() => setIsOpen(false)}>
+                Search
+              </Link>
               <ThemeToggle />
             </>
           )}
@@ -183,9 +238,15 @@ const Header = ({ toggleTheme, theme }) => {
             </button>
           ) : (
             <>
-              <Link to="/signup" onClick={() => setIsOpen(false)}>Sign Up</Link>
-              <Link to="/login" onClick={() => setIsOpen(false)}>Login</Link>
-              <Link to="/about" onClick={() => setIsOpen(false)}>About</Link>
+              <Link to="/signup" onClick={() => setIsOpen(false)}>
+                Sign Up
+              </Link>
+              <Link to="/login" onClick={() => setIsOpen(false)}>
+                Login
+              </Link>
+              <Link to="/about" onClick={() => setIsOpen(false)}>
+                About
+              </Link>
             </>
           )}
         </div>
