@@ -256,94 +256,87 @@ const Header = ({ toggleTheme, theme, products = [] }) => {
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
-		  {isOpen && (
-  <nav className="md:hidden mt-3 space-y-3 bg-blue-900 text-white rounded-lg shadow-lg p-4">
-    <Link to="/" className="block hover:text-blue-400">Home</Link>
+{/* Mobile Menu Dropdown */}
+{isOpen && (
+  <div className="absolute top-16 left-0 w-full bg-blue-900 text-white shadow-lg md:hidden z-50">
+    <nav className="flex flex-col space-y-3 p-4">
+      <Link to="/" className="hover:text-blue-400">Home</Link>
 
-    {user && (
-      <>
-        <Link to="/cart" className="block hover:text-blue-400">
-          <ShoppingCart size={20} className="inline-block mr-1" />
-          Cart
-          {cart.length > 0 && (
-            <span className="ml-2 bg-blue-500 text-white rounded-full px-2 py-0.5 text-xs">
-              {cart.length}
-            </span>
-          )}
-        </Link>
+      {user && (
+        <>
+          <Link to="/cart" className="hover:text-blue-400">
+            <ShoppingCart size={20} className="inline-block mr-1" />
+            Cart
+            {cart.length > 0 && (
+              <span className="ml-2 bg-blue-500 text-white rounded-full px-2 py-0.5 text-xs">
+                {cart.length}
+              </span>
+            )}
+          </Link>
 
-        <Link to="/orders" className="block hover:text-blue-400">
-          <Package size={20} className="inline-block mr-1" />
-          Orders
-          {orderItems?.length > 0 && (
-            <span className="ml-2 bg-green-500 text-white rounded-full px-2 py-0.5 text-xs">
-              {orderItems.length}
-            </span>
-          )}
-        </Link>
+          <Link to="/orders" className="hover:text-blue-400">
+            <Package size={20} className="inline-block mr-1" />
+            Orders
+          </Link>
 
-        <Link to="/search"
-        //   onClick={() => setShowSearch(!showSearch)}
-          className="block hover:text-blue-400"
-        >
-          <Search size={20} className="inline-block mr-1" />
-          Search
-        </Link>
+          <button
+            onClick={() => setShowSearch(!showSearch)}
+            className="hover:text-blue-400 text-left"
+          >
+            <Search size={20} className="inline-block mr-1" />
+            Search
+          </button>
 
-        <ThemeToggle />
-      </>
-    )}
+          <ThemeToggle />
+        </>
+      )}
 
-    {isAdmin && (
-      <Link
-        to="/secret-dashboard"
-        className="block bg-blue-700 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
-      >
-        <Lock size={18} className="inline-block mr-1" />
-        Dashboard
-      </Link>
-    )}
-
-    {user ? (
-      <button
-        onClick={handlelogout}
-        className="block bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
-      >
-        <LogOut size={18} className="inline-block mr-1" />
-        Log Out
-      </button>
-    ) : (
-      <>
+      {isAdmin && (
         <Link
-          to="/signup"
-          className="block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+          to="/secret-dashboard"
+          className="bg-blue-700 hover:bg-blue-600 text-white px-3 py-1 rounded-md"
         >
-          <UserPlus size={18} className="inline-block mr-2" />
-          Sign Up
+          <Lock size={18} className="inline-block mr-1" />
+          Dashboard
         </Link>
-        <Link
-          to="/login"
-          className="block bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
-        >
-          <LogIn size={18} className="inline-block mr-2" />
-          Login
-        </Link>
+      )}
+
+      {user ? (
         <button
-          onClick={toggleTheme}
-          className="block w-full mt-2 px-4 py-2 border rounded bg-gray-200 dark:bg-gray-700 text-black dark:text-white"
+          onClick={handlelogout}
+          className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
         >
-          {theme === "dark" ? "Light Mode" : "Dark Mode"}
+          <LogOut size={18} className="inline-block mr-1" />
+          Log Out
         </button>
-        <Link
-          to="/about"
-          className="block bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md mt-2"
-        >
-          About
-        </Link>
-      </>
-    )}
-  </nav>
+      ) : (
+        <>
+          <Link
+            to="/signup"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+          >
+            <UserPlus size={18} className="inline-block mr-2" />
+            Sign Up
+          </Link>
+          <Link
+            to="/login"
+            className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-md"
+          >
+            <LogIn size={18} className="inline-block mr-2" />
+            Login
+          </Link>
+          <Link
+            to="/about"
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md"
+          >
+            About
+          </Link>
+        </>
+      )}
+    </nav>
+  </div>
 )}
+
 
         </div>
       </div>
