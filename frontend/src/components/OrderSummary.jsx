@@ -17,54 +17,7 @@ export default function OrderSummary({ theme }) {
   const clearCart = useCartStore((state) => state.clearCart)
   // const checkAuth = useUserStore((state) => state.checkAuth);
   const CartToStore = useOrderStore((state) => state.CartToStore);
-  // const handleBuyNow = async() => {
-
-  // if (cart.length === 0) {
-  //   toast.error("Your cart is empty. Please add items before proceeding.");
-  //   return;
-  // }
-  // const stripe = await stripePromise;
-  // 	const res = await fetch("http://localhost:5000/api/payments/create-checkout-session-bulk", {
-  // 		// products: cart,
-  //      method: "POST",
-  // headers: {
-  //   "Content-Type": "application/json",
-  // },
-  // body: JSON.stringify({ products: cart }),
-  // 	});
-  //   console.log("Checkout session response:", res);
-  //   const session = res.data;
-  //   console.log("Checkout session response:", session);
-  // 	const result = await stripe.redirectToCheckout({
-  // 		sessionId: session.id,
-  // 	});
-  // // Check if the user is logged in
-  // const user = useOrderStore.getState().user;
-  // if (!user) {
-  //   toast.error("You must be logged in to place an order.");
-  //   navigate("/login");
-  //   return; 
-  // }
-
-  // 	if (result.error) {
-  // 		console.error("Error:", result.error);
-  // 	}
-  // // Proceed to the bulk order confirmation page
-  // console.log("Navigating to bulk order confirmation with cart:", cart, "and total:", total);
-  // // You can also pass the user info if needed
-  // //  await useOrderStore.getState().CartToStore(cart);
-
-
-  //   navigate("/orders/confirm/bulk", { state: { cart, total } });
-  // //  const success=await CartToStore(cart);
-  // //   console.log("CartToStore returned:", success, "orders now:", useOrderStore.getState().orders);
-  // //  if(success){
-  // //    console.log("Cart items added to orders successfully");  
-  // //  await navigate("/orders/confirm/order-confirmation", { state: { cart, total } });
-  // //  } else {
-  // //   toast.error("Failed to process order. Please try again.");
-  // // }
-  // };
+  
   const handleBuyNow = async () => {
 
     try {
