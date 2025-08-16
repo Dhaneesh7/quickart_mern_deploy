@@ -156,7 +156,7 @@ const Header = ({ toggleTheme, theme }) => {
 
       {/* Mobile Menu */}
       {isOpen && (
-        <div className="md:hidden bg-blue-900 text-white px-6 py-4 space-y-4 animate-slideDown">
+        <div className="md:hidden flex flex-row bg-blue-900 text-white px-6 py-4 space-y-4 animate-slideDown">
           <Link to="/" onClick={() => setIsOpen(false)}>Home</Link>
           {user && (
             <>
