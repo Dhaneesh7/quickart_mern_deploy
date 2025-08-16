@@ -134,6 +134,54 @@ const confirmOrder = async (req, res) => {
   }
 };
 
+const addCartToStore = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    // 1. Find user with cart populated
+    const user = await User.findById(userId)
+      .populate('cartItems.product')
+      .populate('orderItems.product');
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.cartItems || user.cartItems.length === 0) {
+      return res.status(400).json({ message: "Cart is empty" });
+    }
+
+    // 2. Move cart items to orderItems
+    for (const cartItem of user.cartItems) {
+      const existingOrderItem = user.orderItems.find(
+        (item) => item.product.toString() === cartItem.product._id.toString()
+      );
+
+      if (existingOrderItem) {
+        existingOrderItem.quantity += cartItem.quantity;
+      } else {
+        user.orderItems.push({
+          product: cartItem.product._id,
+          quantity: cartItem.quantity,
+        });
+      }
+    }
+
+    // 3. Clear the cart
+    user.cartItems = [];
+
+    // 4. Save user
+    await user.save();
+
+    const updatedUser = await User.findById(userId).populate('orderItems.product');
+    res.status(200).json({
+      message: "Cart moved to order successfully",
+      orderItems: updatedUser.orderItems,
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to move cart to order", error: err.message });
+  }
+};
 
 const addOrder = async (req, res) => {
   try {
@@ -187,5 +235,6 @@ module.exports = {
   getOrder,
     addOrder,
     removeFromOrder,
-    confirmOrder
+    confirmOrder,
+    addCartToStore
 };

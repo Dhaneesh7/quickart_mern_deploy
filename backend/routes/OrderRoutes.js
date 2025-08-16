@@ -4,6 +4,7 @@ const orders=require('../controllers/orderController');
 const { protectRoute } = require('../middleware/Auth_Middleware');
 router.get('/confirm', orders.confirmOrder); // Confirm order endpoint
 router.get('/:userId',orders.getOrder);
+router.post("/cart/:userId",orders.addCartToStore)
 router.post('/:userId',orders.addOrder);
 router.delete('/:userId/:orderId', protectRoute,orders.removeFromOrder);
 module.exports = router;
