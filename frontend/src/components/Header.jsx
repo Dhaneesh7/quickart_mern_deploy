@@ -23,7 +23,7 @@ const Header = ({ toggleTheme, theme }) => {
   const navigate = useNavigate();
   const isAdmin = user?.role === "admin";
   const { cart } = useCartStore();
-  const { orderItems } = useOrderStore();
+  const { orders } = useOrderStore();
 
   const [isThemeSet, setIsThemeSet] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -136,9 +136,9 @@ const { fetchAllProducts,products } = useProductStore();
                 <Link to="/orders" className="relative hover:text-blue-400">
                   <Package size={20} className="inline-block mr-1" />
                   <span className="hidden sm:inline">Orders</span>
-                  {orderItems?.length > 0 && (
+                  {orders?.length > 0 && (
                     <span className="absolute -top-2 -left-2 bg-green-500 text-white rounded-full px-2 py-0.5 text-xs">
-                      {orderItems.length}
+                      {orders.length}
                     </span>
                   )}
                 </Link>
@@ -184,7 +184,7 @@ const { fetchAllProducts,products } = useProductStore();
                           {filteredProducts.map((p) => (
                             <Link
                               key={p.id}
-                              to={`/product/${p.id}`}
+                              to={`/product/${p._id}`}
                               className="block px-4 py-2 hover:bg-gray-200 rounded"
                               onClick={() => {
                                 setShowSearch(false);
@@ -285,11 +285,11 @@ const { fetchAllProducts,products } = useProductStore();
               </span>
             )}
           </Link>
-{/* 
+
           <Link to="/orders" className="hover:text-blue-400">
             <Package size={20} className="inline-block mr-1" />
             Orders
-          </Link> */}
+          </Link>
 
           <Link to="/search"
             onClick={() => setShowSearch(!showSearch)}
