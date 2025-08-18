@@ -79,7 +79,7 @@ const res = await axiosInstance.post("https://quickart-mern-deploy.onrender.com/
     name: formData.name,
     email: formData.email,
     phone: formData.phone,
-    address: formData.address,
+    address: formData.address,unitPriceRupees: productData.price,  // <-- 
   },
   { withCredentials: true })
       // const data = await res.json();
