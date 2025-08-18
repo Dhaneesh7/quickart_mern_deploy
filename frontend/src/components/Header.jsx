@@ -184,7 +184,7 @@ const { fetchAllProducts,products } = useProductStore();
                           {filteredProducts.map((p) => (
                             <Link
                               key={p.id}
-                              to={`/product/${p._id}`}
+                              to={`/products/${p._id}`}
                               className="block px-4 py-2 hover:bg-gray-200 rounded"
                               onClick={() => {
                                 setShowSearch(false);
