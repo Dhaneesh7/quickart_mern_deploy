@@ -133,7 +133,7 @@ const { fetchAllProducts,products } = useProductStore();
                 </Link>
 
                 {/* Orders */}
-                <Link to="/orders" className="relative hover:text-blue-400">
+                {/* <Link to="/orders" className="relative hover:text-blue-400">
                   <Package size={20} className="inline-block mr-1" />
                   <span className="hidden sm:inline">Orders</span>
                   {orderItems?.length > 0 && (
@@ -141,7 +141,7 @@ const { fetchAllProducts,products } = useProductStore();
                       {orderItems.length}
                     </span>
                   )}
-                </Link>
+                </Link> */}
 
                 {/* Search */}
                 <div className="relative" ref={searchRef}>
@@ -268,7 +268,9 @@ const { fetchAllProducts,products } = useProductStore();
           </button>
 {/* Mobile Menu Dropdown */}
 {isOpen && (
-  <div className="absolute top-16 left-0 w-30 bg-blue-900 text-white shadow-lg md:hidden z-50">
+  <div className="absolute top-16 left-0 w-30 bg-blue-900 text-white shadow-lg md:hidden z-50" 
+     onClick={() => setIsOpen(!isOpen)}
+     >
     <nav className="flex flex-col space-y-3 p-4">
       <Link to="/" className="hover:text-blue-400">Home</Link>
 
@@ -283,11 +285,11 @@ const { fetchAllProducts,products } = useProductStore();
               </span>
             )}
           </Link>
-
+{/* 
           <Link to="/orders" className="hover:text-blue-400">
             <Package size={20} className="inline-block mr-1" />
             Orders
-          </Link>
+          </Link> */}
 
           <Link to="/search"
             onClick={() => setShowSearch(!showSearch)}
