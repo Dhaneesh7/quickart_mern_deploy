@@ -23,7 +23,8 @@ export const useOrderStore = create((set) => ({
         quantity,
       });
 
-      set({ orders: response.data, loading: false });
+      // ✅ Always store orderItems array
+      set({ orders: response.data.orderItems || [], loading: false });
       toast.success("Product added to orders");
       return true;
     } catch (error) {
@@ -41,7 +42,7 @@ export const useOrderStore = create((set) => ({
       if (!userId) return;
 
       const response = await axiosInstance.get(`/api/orders/${userId}`);
-      set({ orders: response.data });
+      set({ orders: response.data.orderItems || [] });
     } catch (error) {
       console.error("Failed to fetch orders", error);
       toast.error("Could not load orders");
@@ -67,7 +68,7 @@ export const useOrderStore = create((set) => ({
         cartItems,
       });
 
-      set({ orders: data.orderItems });
+      set({ orders: data.orderItems || [] });
       toast.success("Cart items moved to orders");
       return true;
     } catch (error) {
@@ -87,7 +88,7 @@ export const useOrderStore = create((set) => ({
 
     try {
       const { data } = await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
-      set({ orders: data.orderItems });
+      set({ orders: data.orderItems || [] });
 
       toast.success("Product removed from orders");
       return true;
