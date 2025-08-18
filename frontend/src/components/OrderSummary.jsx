@@ -21,7 +21,7 @@ export default function OrderSummary({ theme }) {
   const handleBuyNow = async () => {
 
     try {
-      //  CartToStore(cart);
+       CartToStore(cart);
       // const token = localStorage.getItem("accessToken"); // or get it from your auth store
       const response = await axiosInstance.post('/api/payments/create-checkout-session-bulk', { cart }, { withCredentials: true });
       window.location.href = response.data.url;

@@ -226,7 +226,7 @@ const removeFromOrder = async (req, res) => {
     await user.save();
 
     const updatedUser = await User.findById(userId).populate('orderItems.product');
-    res.json(updatedUser.orderItems);
+    res.json({orderItems:updatedUser.orderItems});
   } catch (error) {
     res.status(500).json({ message: "Failed to remove product", error: error.message });
   }

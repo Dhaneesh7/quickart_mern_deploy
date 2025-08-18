@@ -3,7 +3,7 @@ import axiosInstance from "../lib/axios";
 import { useUserStore } from "./useUserStore";
 import toast from "react-hot-toast";
 import { useCartStore } from "./useCartStore";
-export const useOrderStore = create((set) => ({
+export const useOrderStore = create((set,get) => ({
   loading: false,
   orders: [],
   addOrder: async (orderData) => {
@@ -11,10 +11,12 @@ export const useOrderStore = create((set) => ({
       const userId = useUserStore.getState().user?.id;
       set({ loading: true });
       const response = await axiosInstance.post(`/api/orders/${userId}`, orderData); // adjust to your backend API
-      set((state) => ({
-        orders: [...state.orders, response.data],
-        loading: false,
-      }));
+      // set((state) => ({
+      //   orders: [...state.orders, response.data],
+      //   loading: false,
+      // }));
+      set({ orders: response.data, loading: false });
+
       return true;
     } catch (error) {
       console.error("Order failed:", error);
@@ -48,10 +50,12 @@ export const useOrderStore = create((set) => ({
     try {
       const { data } = await axiosInstance.post(`/api/orders/cart/${userId}`, { cartItems: cartItems });
       console.log("Response from CartToStore:", data);
-      set((state) => ({
-        orders: [...state.orders, ...data],
-        // orders: [...state.orders, cartItems],
-      }));
+      // set((state) => ({
+      //   orders: [...state.orders, ...data],
+      //   // orders: [...state.orders, cartItems],
+      // }));
+      set({ orders: data.orderItems });
+
       toast.success("Cart items added to orders");
       return true;
     } catch (error) {
@@ -67,11 +71,15 @@ export const useOrderStore = create((set) => ({
     }
     try {
       // Fix endpoint: your backend expects DELETE /carts/:userId with productId in body
-      await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
+      // await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
 
-      set((prevState) => ({
-        orders: prevState.orders.filter((item) => item._id !== orderId),
-      }));
+      // set((prevState) => ({
+      //   orders: prevState.orders.filter((item) => item._id !== orderId),
+      // }));
+      const { data } = await axiosInstance.delete(`/api/orders/${userId}/${orderId}`);
+set({ orders: data.orderItems });
+toast.success("Product removed from orders");
+
       get().calculateTotals();
       toast.success("Product removed from orders");
     } catch (error) {
