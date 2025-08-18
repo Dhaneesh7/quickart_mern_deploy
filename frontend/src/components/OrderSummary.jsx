@@ -22,10 +22,6 @@ export default function OrderSummary({ theme }) {
 
     try {
       const success=await CartToStore();
-          if (!success) {
-      toast.error("Failed to save cart to order. Please try again.");
-      return;
-    }
       // const token = localStorage.getItem("accessToken"); // or get it from your auth store
       const response = await axiosInstance.post('/api/payments/create-checkout-session-bulk', { cart }, { withCredentials: true });
       window.location.href = response.data.url;
