@@ -133,7 +133,7 @@ const { fetchAllProducts,products } = useProductStore();
                 </Link>
 
                 {/* Orders */}
-                {/* <Link to="/orders" className="relative hover:text-blue-400">
+                <Link to="/orders" className="relative hover:text-blue-400">
                   <Package size={20} className="inline-block mr-1" />
                   <span className="hidden sm:inline">Orders</span>
                   {orderItems?.length > 0 && (
@@ -141,7 +141,7 @@ const { fetchAllProducts,products } = useProductStore();
                       {orderItems.length}
                     </span>
                   )}
-                </Link> */}
+                </Link>
 
                 {/* Search */}
                 <div className="relative" ref={searchRef}>
