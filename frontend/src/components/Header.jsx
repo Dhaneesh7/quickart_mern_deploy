@@ -112,7 +112,9 @@ const { fetchAllProducts,products } = useProductStore();
             className="text-2xl font-bold text-blue-400 items-center space-x-2 flex"
           >
             <ShoppingCart className="text-green-500" />
-            Quic<p className="text-green-500">K</p>art
+            <span>
+  Quic<span className="text-green-500">K</span>art
+</span>
           </Link>
 
           {/* Desktop Nav */}
